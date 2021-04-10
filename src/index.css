@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.img-container{
+  background-image: url("resurse/pexels-anna-nekrashevich-6801648.jpg");
+  background-attachment: fixed;
+  /*Fotografie creată de Anna Nekrashevich, de la Pexels*/
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 60% ;
+  height: 60%;
+}
+
+#imagineSondaje{
+  background-image: url("../src/resurse/pexels-lukas-669616.jpg");
+  /*Fotografie creată de Lukas, de la Pexels*/
+  background-size: cover;
+}
+
+.navbar{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: fit-content;
+}
+
+.sondaje{
+  /*position: absolute;*/
+  top: 0;
+  width: 100% ;
+  height: 100%;
+}
+
+.listaSondaje{
+  margin-top: 65px;
+}
+
+#sondaj{
+  margin-left: 1%;
+  width: 98% ;
+  height: fit-content;
+}
+
+#submit{
+  margin-left: 46%;
+  width: 8% ;
+  height: fit-content;
+  text-align: center;
+}
+
+.photo {
+  height: 40px;
+  width: 40px;
+}
