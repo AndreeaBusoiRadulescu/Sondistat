@@ -1,4 +1,5 @@
 import React from "react";
+import {FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup} from "@material-ui/core";
 
 class RaspunsSimplu extends React.Component{
 
@@ -8,9 +9,21 @@ class RaspunsSimplu extends React.Component{
 
     render() {
         return (
-            <div>
+            <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'}>
                 <p>{this.props.detalii.titlu}</p>
-                Raspuns simplu
+                <FormControl component="fieldset">
+                            <RadioGroup>
+                            {
+                                this.props.detalii.optiuni.map((optiune, index) => {
+                                return (
+                                    <label>
+                                        <FormControlLabel value={optiune} control={<Radio/>}/>
+                                        <span>{optiune}</span>
+                                    </label>
+                                )})
+                            }
+                            </RadioGroup>
+                </FormControl>
             </div>
         )
     }

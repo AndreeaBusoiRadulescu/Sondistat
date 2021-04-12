@@ -14,6 +14,7 @@ import FirebaseInstance from "../Firebase";
 import FormularSondajNou from "./FormularSondajNou";
 import DetaliiSondaj from "./DetaliiSondaj";
 import RaspunsDeschis from "./intrebari/RaspunsDeschis";
+import ModelFormular from "./ModelFormular";
 
 class App extends React.Component{
   constructor(props){
@@ -58,6 +59,10 @@ class App extends React.Component{
 
             <Route path="/deschis">
               <RaspunsDeschis />
+            </Route>
+
+            <Route path="/model">
+              <ModelFormular />
             </Route>
 
             <Route path="/">

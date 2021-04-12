@@ -1,4 +1,5 @@
 import React from "react";
+import {Checkbox, FormGroup} from "@material-ui/core";
 
 class RaspunsMultiplu extends React.Component{
 
@@ -8,9 +9,20 @@ class RaspunsMultiplu extends React.Component{
 
     render() {
         return (
-            <div>
+            <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'}>
                 <p>{this.props.detalii.titlu}</p>
-                Raspuns multiplu
+                <FormGroup>
+                    {
+                        this.props.detalii.optiuni.map((optiune, index) => {
+                            return (
+                                <label>
+                                    <Checkbox/>
+                                    <span>{optiune}</span>
+                                </label>
+                            )
+                        })
+                    }
+                </FormGroup>
             </div>
         )
     }

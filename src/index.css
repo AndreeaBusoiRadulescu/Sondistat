@@ -14,10 +14,11 @@ code {
 
 .img-container{
   background-image: url("resurse/pexels-anna-nekrashevich-6801648.jpg");
-  background-attachment: fixed;
+  /*background-attachment: fixed;*/
   /*Fotografie creată de Anna Nekrashevich, de la Pexels*/
   background-size: cover;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,10 +43,9 @@ code {
 }
 
 .sondaje{
-  /*position: absolute;*/
-  top: 0;
+  position: absolute;
+  top: 20px;
   width: 100% ;
-  height: 100%;
 }
 
 .listaSondaje{
@@ -68,4 +68,17 @@ code {
 .photo {
   height: 40px;
   width: 40px;
+}
+
+#grayback{
+  background: none;
+}
+
+#salvareRaspuns{
+  margin-left: 46%;
+  width: 10% ;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  height: fit-content;
+  text-align: center;
 }

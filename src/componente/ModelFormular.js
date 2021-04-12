@@ -1,17 +1,17 @@
-import React from "react";
 import MeniuInapoi from "./MeniuInapoi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCopy} from "@fortawesome/free-solid-svg-icons";
-import RaspunsSimplu from "./intrebari/RaspunsSimplu";
-import RaspunsMultiplu from "./intrebari/RaspunsMultiplu";
+import {faArrowLeft, faCopy} from "@fortawesome/free-solid-svg-icons";
 import RaspunsDeschis from "./intrebari/RaspunsDeschis";
+import RaspunsMultiplu from "./intrebari/RaspunsMultiplu";
+import RaspunsSimplu from "./intrebari/RaspunsSimplu";
+import React from "react";
+import profil from "../resurse/profil.png";
 
 const INTREBARE_RASPUNS_DESCHIS = 1
 const INTREBARE_RASPUNS_SIMPLU = 2
 const INTREBARE_RASPUNS_MULTIPLU = 3
 
-class DetaliiSondaj extends React.Component{
-
+class ModelFormular extends React.Component {
     constructor() {
         super();
 
@@ -29,43 +29,45 @@ class DetaliiSondaj extends React.Component{
             "id": 5,
             "ownerId": 10,
             "intrebari": [
-            {
-                "ordine": 1,
-                "tip": 1,
-                "detalii": {
-                    "titlu": "Scrieti numele cainelui dumneavoastra",
-                    "numarMaxCuvinte": 500
+                {
+                    "ordine": 1,
+                    "tip": 1,
+                    "detalii": {
+                        "titlu": "Scrieti numele cainelui dumneavoastra",
+                        "numarMaxCuvinte": 500
+                    }
+                },
+                {
+                    "ordine": 2,
+                    "tip": 2,
+                    "detalii": {
+                        "titlu": "Cat de des va spalati pe cap?",
+                        "optiuni": [
+                            "Mereu",
+                            "Niciodata",
+                            "Asa si asa"
+                        ]
+                    }
+                },
+                {
+                    "ordine": 3,
+                    "tip": 3,
+                    "detalii": {
+                        "titlu": "Alegeti mai multe legume care va plac",
+                        "optiuni": [
+                            "Castravete",
+                            "Vanata",
+                            "Varza",
+                            "Ridichie"
+                        ]
+                    }
                 }
-            },
-            {
-                "ordine": 2,
-                "tip": 2,
-                "detalii": {
-                    "titlu": "Cat de des va spalati pe cap?",
-                    "optiuni": [
-                        "Mereu",
-                        "Niciodata",
-                        "Asa si asa"
-                    ]
-                }
-            },
-            {
-                "ordine": 3,
-                "tip": 3,
-                "detalii": {
-                    "titlu": "Alegeti mai multe legume care va plac",
-                    "optiuni": [
-                        "Castravete",
-                        "Vanata",
-                        "Varza",
-                        "Ridichie"
-                    ]
-                }
-            }
             ]
         }
 
         this.state = {
+            titlu : "Titlu",
+            detalii : "Detalii",
             intrebari: []
         }
     }
@@ -80,29 +82,17 @@ class DetaliiSondaj extends React.Component{
     }
 
     render() {
-
-        let component = () => {}
-
-        return(
+        return (
             <div className={"img-container "} id={"grayback"}>
                 <div className={"sondaje d-flex flex-column"}>
-                    <MeniuInapoi/>
-
                     <div className={"listaSondaje"}>
-                        <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
-                            <h1>Titlu</h1>
-                            <p>Detalii formular</p>
-                        </div>
-                        <div className={" d-flex justify-content-between"}>
-                            <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
-                                <h5 className="numeSondaj m-3">Numar raspunsuri:</h5>
-                            </div>
-                            <div className="card shadow-lg rounded-lg min-vw-80 mb-2 mr-3 " id={'sondaj'} >
-                                <div className="d-flex justify-content-between">
-                                    <h5 className="numeSondaj m-3">Link:</h5>
-                                    <FontAwesomeIcon icon={faCopy}/>
-                                </div>
-                            </div>
+                        <nav className="navbar mb-2 navbar-expand-lg navbar-light bg-light border-bottom d-flex justify-content-center">
+                            <a href="login"></a>
+                        </nav>
+
+                        <div className="card shadow-lg rounded-lg mb-4"id={'sondaj'}>
+                            <h1>{this.state.titlu}</h1>
+                            <p>{this.state.detalii}</p>
                         </div>
 
                         {/*De facut logica de randare in functie de ce intrebari avem*/}
@@ -133,6 +123,9 @@ class DetaliiSondaj extends React.Component{
                                 }
                             })
                         }
+
+                        <input type="submit" className="card" id="salvareRaspuns" value="Salveaza raspunsul"/>
+
                     </div>
                 </div>
             </div>
@@ -140,4 +133,4 @@ class DetaliiSondaj extends React.Component{
     }
 }
 
-export default DetaliiSondaj;
+export default ModelFormular;

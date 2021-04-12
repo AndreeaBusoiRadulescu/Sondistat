@@ -30,7 +30,7 @@ class FormularSondajNou extends React.Component{
                             </div>
                         </div>
 
-                        <input type="submit" className="card" id={'submit'} value="Genereaza link!"/>
+                        <input type="submit" className="card" id={'submit'} value="Salveaza formular!"/>
                         
                     </div>
                 </div>
