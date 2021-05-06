@@ -42,20 +42,45 @@ code {
   height: fit-content;
 }
 
-.sondaje{
+
+.titlu{
+  font-size: 20px;
+  color: black;
+}
+
+.titlu:hover{
+  /*color: #eeffff;*/
+  color: #ecfffd;
+}
+
+#model{
+  /*background-color: #89abc6;*/
+  background-color: #88c399;
+}
+
+.fundal-carduri{
   position: absolute;
   top: 20px;
-  width: 100% ;
+  width: 100%;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
-.listaSondaje{
-  margin-top: 65px;
+.lista-carduri{
+  margin-top: 55px;
+  /*background-color: #baddf9;*/
+  background-color: #b9f6ca;
+  margin-bottom: 55px;
 }
 
-#sondaj{
+#element-lista{
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
   margin-left: 1%;
   width: 98% ;
   height: fit-content;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
 }
 
 #submit{
@@ -75,10 +100,14 @@ code {
 }
 
 #salvareRaspuns{
-  margin-left: 46%;
-  width: 10% ;
-  margin-bottom: 50px;
-  margin-top: 50px;
-  height: fit-content;
-  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: 1%;
+  width: 98% ;
+  font-size: 18px;
+}
+
+.form-control{
+  margin: 5px;
+  width: 99% ;
 }

@@ -85,10 +85,9 @@ class DetaliiSondaj extends React.Component{
 
         return(
             <div className={"img-container "} id={"grayback"}>
-                <div className={"sondaje d-flex flex-column"}>
-                    <MeniuInapoi/>
-
-                    <div className={"listaSondaje"}>
+                <MeniuInapoi/>
+                <div className={"fundal-carduri d-flex flex-column"}>
+                    <div className={"lista-carduri"}>
                         <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
                             <h1>Titlu</h1>
                             <p>Detalii formular</p>

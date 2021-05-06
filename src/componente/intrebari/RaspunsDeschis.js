@@ -8,7 +8,7 @@ class RaspunsDeschis extends React.Component{
 
     render() {
         return (
-        <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'}>
+        <div className="card rounded-lg min-vw-80 mb-2" id={'element-lista'}>
             <p>{this.props.detalii.titlu}</p>
             <textarea className="form-control" id="exampleFormControlTextarea1" rows={this.props.detalii.numarMaxCuvinte/100}/>
         </div>

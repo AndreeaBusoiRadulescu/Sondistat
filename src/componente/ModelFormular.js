@@ -23,7 +23,7 @@ class ModelFormular extends React.Component {
         // 2. tip: 1 -> Raspuns deschis   2 -> Raspuns simplu   3-> Raspuns multiplu
         // 3. detalii de implementare pt fiecare tip in parte (difera de la una la alta. Aici se vede puterea NoSQL <3)
         this.titlu = "Sondaj divers"
-        this.detalii = "Acest sondaj este realizat de Busoi Andreea si are ca scop realizarea unui exemplu didactic"
+        this.detalii = "Acest sondaj este realizat de Busoi Andreea si are ca scop realizarea unui exemplu didactic."
 
         this.intrebarileMele = {
             "id": 5,
@@ -75,6 +75,9 @@ class ModelFormular extends React.Component {
 
     componentDidMount() {
         this.setState({intrebari: this.intrebarileMele.intrebari})
+        this.setState({titlu: this.titlu})
+        this.setState({detalii: this.detalii})
+
     }
 
     handleClick(){
@@ -84,13 +87,13 @@ class ModelFormular extends React.Component {
     render() {
         return (
             <div className={"img-container "} id={"grayback"}>
-                <div className={"sondaje d-flex flex-column"}>
-                    <div className={"listaSondaje"}>
-                        <nav className="navbar mb-2 navbar-expand-lg navbar-light bg-light border-bottom d-flex justify-content-center">
-                            <a href="login"></a>
-                        </nav>
+                    <nav className="navbar mb-2 navbar-expand-lg navbar-light border-bottom d-flex justify-content-center" id="model">
+                        <a className="titlu" href="login"><b>Sondistat</b></a>
+                    </nav>
+                <div className={"fundal-carduri d-flex flex-column"}>
+                    <div className={"lista-carduri  rounded-lg"}>
 
-                        <div className="card shadow-lg rounded-lg mb-4"id={'sondaj'}>
+                        <div className="card shadow-lg rounded-lg" id={'element-lista'}>
                             <h1>{this.state.titlu}</h1>
                             <p>{this.state.detalii}</p>
                         </div>
@@ -124,7 +127,9 @@ class ModelFormular extends React.Component {
                             })
                         }
 
-                        <input type="submit" className="card" id="salvareRaspuns" value="Salveaza raspunsul"/>
+                        <div className="card shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista'}>
+                            <h6 ><b>Salveaza raspunsul</b></h6>
+                        </div>
 
                     </div>
                 </div>

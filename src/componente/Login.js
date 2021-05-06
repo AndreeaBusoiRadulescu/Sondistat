@@ -34,30 +34,38 @@ class Login extends React.Component
             var token = credential.accessToken;
             // The signed-in user info.
             var user = result.user;
-            console.log("nuu");
-            console.log(user);
-            console.log("nuuu2222");
-            // Add a new document in collection "cities"
-            console.log(FirebaseInstance().getInstance());
-            let db = FirebaseInstance().getDatabase();
-            console.log("daaaaaa");
-            console.log(db);
 
-            //TODO: Niste toast-uri?
-            FirebaseInstance().createDbUserFromFirebaseAuthUser(user)
-            .then((insertedUser) => {
-                console.log("Utilizatorul a fost adaugat in baza de date. Are id-ul generat");
-                FirebaseInstance().extractUser(insertedUser).then((user) => {
-                    console.log(user);
-                    FirebaseInstance().getUserById(user.id).then((user) => {
-                        console.log(user);
-                    })
-                });
+            FirebaseInstance().getUserById(user.uid).then( (dbUser) => {
+                if(dbUser === null){
+                    FirebaseInstance().createDbUserFromFirebaseAuthUser(user)
+                        .then((insertedUser) => {
+                            console.log("Utilizatorul a fost adaugat in baza de date. Are id-ul generat");
+
+                            //Some testing here...
+                            // FirebaseInstance().extractUser(insertedUser).then((user) => {
+                            //     console.log(user);
+                            //     FirebaseInstance().getUserById(user.id).then((user) => {
+                            //         console.log(user);
+                            //     })
+                            // });
+                            //
+                        })
+                        .catch((error) => {
+                            console.error("Nu s-a putut adauga utilizatorul in baza de date!: ", error);
+                        });
+                }
+                else {
+                    console.log("Utilizatorul exista si este: ")
+                    console.log(dbUser)
+                    FirebaseInstance().setCurrentUser(dbUser)
+                    console.log(FirebaseInstance().getCurrentUser())
+                }
+
+                window.location.href = "sondaje"
+                //TODO: Niste toast-uri?
+                // ...
             })
-            .catch((error) => {
-                console.error("Nu s-a putut adauga utilizatorul in baza de date!: ", error);
-            });
-            // ...
+
         }).catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
