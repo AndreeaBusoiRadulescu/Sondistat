@@ -9,7 +9,7 @@ class MeniuAdaugareSondajNou extends React.Component{
 
     render() {
         return(
-            <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} onClick={this.handleClick} >
+            <div className="card shadow-lg rounded-lg min-vw-80 mt-3 mb-3" id={'sondaj'} onClick={this.handleClick} >
                 <div className="card-body">
                     <h5>Adauga sondaj nou</h5>
                     <FontAwesomeIcon icon={faPlusCircle} />

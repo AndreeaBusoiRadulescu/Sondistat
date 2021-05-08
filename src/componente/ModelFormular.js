@@ -86,14 +86,13 @@ class ModelFormular extends React.Component {
 
     render() {
         return (
-            <div className={"img-container "} id={"grayback"}>
+            <div className={"img-container"} id={"back"}>
                     <nav className="navbar mb-2 navbar-expand-lg navbar-light border-bottom d-flex justify-content-center" id="model">
                         <a className="titlu" href="login"><b>Sondistat</b></a>
                     </nav>
-                <div className={"fundal-carduri d-flex flex-column"}>
-                    <div className={"lista-carduri  rounded-lg"}>
-
-                        <div className="card shadow-lg rounded-lg" id={'element-lista'}>
+                <div className={"fundal-carduri-model d-flex flex-column"} style={{backgroundColor: "red"}}>
+                    <div className={"lista-carduri-model  rounded-lg"} id={"fundal-model"}>
+                        <div className="element-model card shadow-lg rounded-lg" id={'element-lista-model'}>
                             <h1>{this.state.titlu}</h1>
                             <p>{this.state.detalii}</p>
                         </div>
@@ -127,7 +126,7 @@ class ModelFormular extends React.Component {
                             })
                         }
 
-                        <div className="card shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista'}>
+                        <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista-model'}>
                             <h6 ><b>Salveaza raspunsul</b></h6>
                         </div>
 

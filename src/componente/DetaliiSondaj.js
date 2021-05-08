@@ -73,6 +73,11 @@ class DetaliiSondaj extends React.Component{
 
     componentDidMount() {
         this.setState({intrebari: this.intrebarileMele.intrebari})
+
+        //id-ul sondajului afisat
+        this.idSondaj = window.location.pathname.split("/")[2];
+
+        //TODO: Incarcare firebase
     }
 
     handleClick(){
@@ -84,7 +89,7 @@ class DetaliiSondaj extends React.Component{
         let component = () => {}
 
         return(
-            <div className={"img-container "} id={"grayback"}>
+            <div className={"img-container "} id={"back"}>
                 <MeniuInapoi/>
                 <div className={"fundal-carduri d-flex flex-column"}>
                     <div className={"lista-carduri"}>

@@ -8,6 +8,11 @@ class MeniuSondaj extends React.Component{
 
     constructor(props) {
         super(props);
+        this.onClickDetalii = this.onClickDetalii.bind(this);
+    }
+
+    onClickDetalii() {
+        window.location.href = "detalii/55"
     }
 
     render() {
@@ -25,6 +30,8 @@ class MeniuSondaj extends React.Component{
             </div>
         )
     }
+
+
 }
 
 export default MeniuSondaj;

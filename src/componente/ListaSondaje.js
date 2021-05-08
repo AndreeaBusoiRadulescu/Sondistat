@@ -4,6 +4,12 @@ import MeniuInapoi from "./MeniuInapoi";
 import MeniuAdaugareSondajNou from "./MeniuAdaugareSondajNou";
 import MeniuLogOut from "./MeniuLogOut";
 import FirebaseInstance from "../Firebase";
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar/Snackbar';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 class ListaSondaje extends React.Component{
 
@@ -18,7 +24,8 @@ class ListaSondaje extends React.Component{
         //     console.log(formulare)
         // })
         this.state = {
-            sondajeleMele: []
+            sondajeleMele: [],
+            snackbar: true
         }
     }
 
@@ -29,21 +36,38 @@ class ListaSondaje extends React.Component{
         })
     }
 
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({"snackbar": false})
+        // event.setOpen(false);
+    };
+
     render() {
         return(
-            <div className={"img-container "} id={"imagineSondaje"}>
-                <div className={"fundal-carduri d-flex flex-column"}>
-                    <MeniuLogOut/>
-                    <div className={"lista-carduri"}>
+            <div className={"img-container "}>
+                <MeniuLogOut/>
+                <div className={"main-container d-flex flex-row justify-content-center"}>
+                    <div className={"lista-carduri d-flex flex-column justify-content-center"}>
                         <MeniuAdaugareSondajNou/>
+                        <div className={"d-flex flex-column justify-content-center mr-3"} id={"scrolabil"}>
                         {
                             this.state.sondajeleMele.map((sondaj, index) => {
                                 return <MeniuSondaj key={index} sondaj={sondaj}/>
                             })
                         }
+                        </div>
                     </div>
                 </div>
+
+                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                    <Alert  severity="success">
+                       Te-ai logat cu succes!
+                    </Alert>
+                </Snackbar>
             </div>
+
         )
     }
 }

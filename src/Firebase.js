@@ -52,6 +52,7 @@ const FirebaseInstance = (function () {
         },
 
         saveSondaj: async function (title, details, questions) {
+            console.log(questions)
             let docRef = await this.getDatabase().collection("sondaje").add({
                 title: title,
                 details: details,

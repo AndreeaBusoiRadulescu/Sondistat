@@ -9,7 +9,7 @@ class RaspunsSimplu extends React.Component{
 
     render() {
         return (
-            <div className="card rounded-lg min-vw-80 mb-2" id={'element-lista'}>
+            <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2" id={'element-lista-model'}>
                 <p>{this.props.detalii.titlu}</p>
                 <FormControl component="fieldset">
                             <RadioGroup>

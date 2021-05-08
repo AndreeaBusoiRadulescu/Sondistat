@@ -82,7 +82,7 @@ class Login extends React.Component
     render() {
         return(
             <div>
-                <div className="img-container">
+                <div className="img-container" id={"imagineSondaje"}>
                     {/* formular Log In */}
                     <div className="card m-auto mt-5 shadow-lg rounded-lg" >
                         <div className="card-body d-flex flex-column d-flex justify-content-around">
