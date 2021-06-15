@@ -8,9 +8,9 @@ import firebase from "firebase";
 //DOCUMENATIE AICI:
 // https://firebase.google.com/docs/reference/js/firebase.firestore
 
-const FirebaseInstance = (function () {
+const DatabaseInstance = (function () {
 
-    const CurrentUser = {};
+    //Clasa Singleton. Asa se face in JS
     return {
 
         getCurrentUser: function () {
@@ -40,6 +40,10 @@ const FirebaseInstance = (function () {
             return firebase.firestore(this.getInstance())
         },
 
+        getCurrentUserPhotoURL: function () {
+            return this.getCurrentUser().photoURL;
+        },
+
         createDbUserFromFirebaseAuthUser: async function (authUser) {
             // Returneaza o promisiune, fiind un apel asincron.
             // Trebuie prinsa si tratata (cu then si catch) de clasa care va apela metoda asta
@@ -58,7 +62,7 @@ const FirebaseInstance = (function () {
             let docRef = await this.getDatabase().collection("sondaje").add({
                 title: title,
                 details: details,
-                ownerId: FirebaseInstance().getCurrentUser().id,
+                ownerId: DatabaseInstance().getCurrentUser().id,
                 questions: questions
             });
 
@@ -104,6 +108,7 @@ const FirebaseInstance = (function () {
             //get the old user document ref
         },
 
+
         // deleteSondaj: async function (id) {
         //     await this.getDatabase().collection("sondaje").where("id", "==", id).get().
         // }
@@ -111,4 +116,4 @@ const FirebaseInstance = (function () {
 
 });
 
-export default FirebaseInstance;
+export default DatabaseInstance;

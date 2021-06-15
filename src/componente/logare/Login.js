@@ -2,7 +2,7 @@
 import React from "react";
 //import "../css/Login.css";
 import firebase from "firebase"
-import FirebaseInstance from "../Firebase";
+import DatabaseInstance from "../../Database";
 // import FirebaseUtil from "../Firebase";
 
 
@@ -35,14 +35,14 @@ class Login extends React.Component
             // The signed-in user info.
             var user = result.user;
 
-            FirebaseInstance().getUserById(user.uid).then( (dbUser) => {
+            DatabaseInstance().getUserById(user.uid).then( (dbUser) => {
                 console.log(dbUser)
                 if(dbUser === null){
-                    FirebaseInstance().createDbUserFromFirebaseAuthUser(user)
+                    DatabaseInstance().createDbUserFromFirebaseAuthUser(user)
                         .then((insertedUser) => {
                             console.log("Utilizatorul a fost adaugat in baza de date. Are id-ul generat");
                             console.log(insertedUser)
-                            FirebaseInstance().setCurrentUser(insertedUser)
+                            DatabaseInstance().setCurrentUser(insertedUser)
                             window.location.href = "sondaje"
                         })
                         .catch((error) => {
@@ -52,8 +52,8 @@ class Login extends React.Component
                 else {
                     console.log("Utilizatorul exista si este: ")
                     console.log(dbUser)
-                    FirebaseInstance().setCurrentUser(dbUser)
-                    console.log(FirebaseInstance().getCurrentUser())
+                    DatabaseInstance().setCurrentUser(dbUser)
+                    console.log(DatabaseInstance().getCurrentUser())
                     window.location.href = "sondaje"
                 }
 

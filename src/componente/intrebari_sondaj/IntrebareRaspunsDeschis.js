@@ -1,6 +1,6 @@
 import React from "react";
 
-class RaspunsDeschis extends React.Component{
+class IntrebareRaspunsDeschis extends React.Component{
 
     constructor(props) {
         super(props);
@@ -16,4 +16,4 @@ class RaspunsDeschis extends React.Component{
     }
 }
 
-export default RaspunsDeschis;
+export default IntrebareRaspunsDeschis;

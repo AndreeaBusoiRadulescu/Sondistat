@@ -1,9 +1,9 @@
 import React from 'react';
-import MeniuSondaj from "./MeniuSondaj";
-import MeniuInapoi from "./MeniuInapoi";
-import MeniuAdaugareSondajNou from "./MeniuAdaugareSondajNou";
-import MeniuLogOut from "./MeniuLogOut";
-import FirebaseInstance from "../Firebase";
+import MeniuSondaj from "../meniuri_componente/MeniuSondaj";
+import MeniuInapoi from "../meniuri_navigare/MeniuInapoi";
+import MeniuAdaugareSondajNou from "../meniuri_componente/MeniuAdaugareSondajNou";
+import MeniuLogOut from "../meniuri_navigare/MeniuLogOut";
+import DatabaseInstance from "../../Database";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar/Snackbar';
 
@@ -19,7 +19,7 @@ class ListaSondaje extends React.Component{
         // console.log(FirebaseInstance().getCurrentUser().id)
         // Teste
         //Adaugare formular fake
-        // FirebaseInstance().saveSondaj("titlu", "descriere", "intrebari");
+        // FirebaseInstance().saveSondaj("titlu", "descriere", "intrebari_sondaj");
         // FirebaseInstance().getUserSondaje().then((formulare) => {
         //     console.log(formulare)
         // })
@@ -31,7 +31,7 @@ class ListaSondaje extends React.Component{
 
     componentDidMount() {
         //Luam sondajele
-        FirebaseInstance().getCurrentUserSondaje().then((sondaje) => {
+        DatabaseInstance().getCurrentUserSondaje().then((sondaje) => {
             this.setState({sondajeleMele: sondaje})
         })
     }

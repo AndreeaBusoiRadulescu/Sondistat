@@ -1,17 +1,10 @@
-import MeniuInapoi from "./MeniuInapoi";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faCopy} from "@fortawesome/free-solid-svg-icons";
-import RaspunsDeschis from "./intrebari/RaspunsDeschis";
-import RaspunsMultiplu from "./intrebari/RaspunsMultiplu";
-import RaspunsSimplu from "./intrebari/RaspunsSimplu";
+import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
+import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
+import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import React from "react";
-import profil from "../resurse/profil.png";
+import {renderVectorIntrebari} from "../FunctiiUtile";
 
-const INTREBARE_RASPUNS_DESCHIS = 1
-const INTREBARE_RASPUNS_SIMPLU = 2
-const INTREBARE_RASPUNS_MULTIPLU = 3
-
-class ModelFormular extends React.Component {
+class FormularCompletare extends React.Component {
     constructor() {
         super();
 
@@ -80,10 +73,6 @@ class ModelFormular extends React.Component {
 
     }
 
-    handleClick(){
-        window.location.href = "sondaje";
-    }
-
     render() {
         return (
             <div className={"img-container"} id={"back"}>
@@ -97,34 +86,7 @@ class ModelFormular extends React.Component {
                             <p>{this.state.detalii}</p>
                         </div>
 
-                        {/*De facut logica de randare in functie de ce intrebari avem*/}
-                        {
-                            this.state.intrebari.map((intrebare, index) => {
-                                // returneaza elementul si paseaza cheia
-                                if (intrebare.tip === INTREBARE_RASPUNS_DESCHIS) {
-                                    return (
-                                        <div>
-                                            <RaspunsDeschis key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else if (intrebare.tip === INTREBARE_RASPUNS_MULTIPLU) {
-                                    return (
-                                        <div>
-                                            <RaspunsMultiplu key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else if (intrebare.tip === INTREBARE_RASPUNS_SIMPLU) {
-                                    return (
-                                        <div>
-                                            <RaspunsSimplu key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else {
-                                    console.log("Nu am putut coverti intrebarea " + intrebare + " in componenta!")
-                                    return (<div key={index}>Componenta invalida!</div>)
-                                }
-                            })
-                        }
+                        {renderVectorIntrebari(this.state.intrebari)}
 
                         <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista-model'}>
                             <h6 ><b>Salveaza raspunsul</b></h6>
@@ -137,4 +99,4 @@ class ModelFormular extends React.Component {
     }
 }
 
-export default ModelFormular;
+export default FormularCompletare;

@@ -1,7 +1,7 @@
 import '../App.css';
 import React from 'react';
-import Login from '../componente/Login';
-import ListaSondaje from './ListaSondaje';
+import Login from './logare/Login';
+import ListaSondaje from './sondajele_mele/ListaSondaje';
 
 import {
   BrowserRouter as Router,
@@ -10,11 +10,11 @@ import {
   Redirect
 } from "react-router-dom";
 import firebase from 'firebase';
-import FirebaseInstance from "../Firebase";
-import FormularSondajNou from "./FormularSondajNou";
-import DetaliiSondaj from "./DetaliiSondaj";
-import RaspunsDeschis from "./intrebari/RaspunsDeschis";
-import ModelFormular from "./ModelFormular";
+import DatabaseInstance from "../Database";
+import ConstructorDeSondaj from "./constructie_sondaj/ConstructorDeSondaj";
+import DetaliiSondaj from "./sondajele_mele/DetaliiSondaj";
+import IntrebareRaspunsDeschis from "./intrebari_sondaj/IntrebareRaspunsDeschis";
+import FormularCompletare from "./completare_sondaj/FormularCompletare";
 
 class App extends React.Component{
   constructor(props){
@@ -30,7 +30,7 @@ class App extends React.Component{
     };
     if (!firebase.apps.length) {
       let firebaseApp = firebase.initializeApp(firebaseConfig);
-      FirebaseInstance().setInstance(firebaseApp);
+      DatabaseInstance().setInstance(firebaseApp);
     }
     firebase.analytics();
   }
@@ -50,7 +50,7 @@ class App extends React.Component{
             </Route>
 
             <Route path="/adaugare">
-            <FormularSondajNou/>
+            <ConstructorDeSondaj/>
             </Route>
 
             <Route path="/detalii">
@@ -58,11 +58,11 @@ class App extends React.Component{
             </Route>
 
             <Route path="/deschis">
-              <RaspunsDeschis />
+              <IntrebareRaspunsDeschis />
             </Route>
 
             <Route path="/model">
-              <ModelFormular />
+              <FormularCompletare />
             </Route>
 
             <Route path="/">

@@ -1,7 +1,7 @@
 import React from "react";
 import {FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup} from "@material-ui/core";
 
-class RaspunsSimplu extends React.Component{
+class IntrebareRaspunsSimplu extends React.Component{
 
     constructor(props) {
         super(props);
@@ -16,7 +16,7 @@ class RaspunsSimplu extends React.Component{
                             {
                                 this.props.detalii.optiuni.map((optiune, index) => {
                                 return (
-                                    <label>
+                                    <label key={index}>
                                         <FormControlLabel value={optiune} control={<Radio/>}/>
                                         <span>{optiune}</span>
                                     </label>
@@ -29,4 +29,4 @@ class RaspunsSimplu extends React.Component{
     }
 }
 
-export default RaspunsSimplu;
+export default IntrebareRaspunsSimplu;

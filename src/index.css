@@ -66,7 +66,10 @@ code {
 .fundal-carduri-model{
   position: absolute;
   top: 20px;
-  width: 100%;
+  width: 80%;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .fundal-carduri{
@@ -79,6 +82,9 @@ code {
   position: absolute;
   top: 63px;
   width: 80% ;
+  margin: auto;
+  left:0;
+  right:0;
   margin-bottom: 55px;
 }
 
@@ -99,8 +105,9 @@ code {
   margin-bottom: 2rem;
   margin-top: 2rem;
   padding: 1.5rem;
-  margin-left: 20%;
-  width: 60% ;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70% ;
   height: fit-content;
   /*box-shadow: 0 1px 1px 0 rgb(0 0 0), 0 3px 1px -2px rgb(0 0 0), 0 1px 5px 0 rgb(0 0 0);*/
 }

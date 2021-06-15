@@ -1,14 +1,11 @@
 import React from "react";
-import MeniuInapoi from "./MeniuInapoi";
+import MeniuInapoi from "../meniuri_navigare/MeniuInapoi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCopy} from "@fortawesome/free-solid-svg-icons";
-import RaspunsSimplu from "./intrebari/RaspunsSimplu";
-import RaspunsMultiplu from "./intrebari/RaspunsMultiplu";
-import RaspunsDeschis from "./intrebari/RaspunsDeschis";
-
-const INTREBARE_RASPUNS_DESCHIS = 1
-const INTREBARE_RASPUNS_SIMPLU = 2
-const INTREBARE_RASPUNS_MULTIPLU = 3
+import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
+import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
+import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
+import {renderVectorIntrebari} from "../FunctiiUtile";
 
 class DetaliiSondaj extends React.Component{
 
@@ -80,10 +77,6 @@ class DetaliiSondaj extends React.Component{
         //TODO: Incarcare firebase
     }
 
-    handleClick(){
-        window.location.href = "sondaje";
-    }
-
     render() {
 
         let component = () => {}
@@ -109,34 +102,10 @@ class DetaliiSondaj extends React.Component{
                             </div>
                         </div>
 
-                        {/*De facut logica de randare in functie de ce intrebari avem*/}
                         {
-                            this.state.intrebari.map((intrebare, index) => {
-                                // returneaza elementul si paseaza cheia
-                                if (intrebare.tip === INTREBARE_RASPUNS_DESCHIS) {
-                                    return (
-                                        <div>
-                                            <RaspunsDeschis key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else if (intrebare.tip === INTREBARE_RASPUNS_MULTIPLU) {
-                                    return (
-                                        <div>
-                                            <RaspunsMultiplu key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else if (intrebare.tip === INTREBARE_RASPUNS_SIMPLU) {
-                                    return (
-                                        <div>
-                                            <RaspunsSimplu key={index} detalii={intrebare.detalii}/>
-                                        </div>
-                                    )
-                                } else {
-                                    console.log("Nu am putut coverti intrebarea " + intrebare + " in componenta!")
-                                    return (<div key={index}>Componenta invalida!</div>)
-                                }
-                            })
+                            renderVectorIntrebari(this.state.intrebari)
                         }
+
                     </div>
                 </div>
             </div>

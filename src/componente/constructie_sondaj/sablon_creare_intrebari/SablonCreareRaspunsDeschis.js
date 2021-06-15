@@ -1,6 +1,7 @@
 import React from "react";
+import {INTREBARE_RASPUNS_DESCHIS} from "../../intrebari_sondaj/EnumTipIntrebari";
 
-class SablonRaspunsDeschis extends React.Component{
+class SablonCreareRaspunsDeschis extends React.Component{
 
     constructor(props) {
         super(props);
@@ -9,6 +10,7 @@ class SablonRaspunsDeschis extends React.Component{
         this.handleIntrebare = this.handleIntrebare.bind(this)
         this.handleSave = this.handleSave.bind(this)
 
+        //Raspunsul deschis are o intrebare, numar maxim de cuvinte si eroareDeValidare
         this.state = {
             maxWords: "",
             intrebare: "",
@@ -24,13 +26,14 @@ class SablonRaspunsDeschis extends React.Component{
         this.setState({intrebare: e.target.value})
     }
 
+    //Utilizatorul apasa butonul de save
+    //Daca nu exista probleme de validare raspunsul este trimis mai departe
     async handleSave() {
 
         console.log("HANDLE!")
         await this.setState({eroareValidare: ""})
 
         if (!this.state.maxWords || isNaN(this.state.maxWords)) {
-            alert("Numarul de cuvinte trebuie exprimat in cifre!");
             await this.setState({eroareValidare: "Numarul de cuvinte trebuie exprimat in cifre!"})
         }
 
@@ -38,7 +41,6 @@ class SablonRaspunsDeschis extends React.Component{
         console.log(this.state.maxWords)
 
         if (!this.state.intrebare || this.state.intrebare.length < 5) {
-            alert("Intrebarea trebuie sa aiba cel putin 5 caractere!");
             await this.setState({eroareValidare: "Intrebarea trebuie sa aiba cel putin 5 caractere!"})
         }
 
@@ -49,13 +51,16 @@ class SablonRaspunsDeschis extends React.Component{
             //Si dam mai departe prin callbackul (functia stabilita de parinte prin care poate fi notificat) din props catre parinte
 
             this.props.onSave({
-                tip: 1,
+                tip: INTREBARE_RASPUNS_DESCHIS,
                 detalii: {
                     titlu: this.state.intrebare,
                     numarMaxCuvinte: this.state.maxWords
                 }
             })
         }
+        else
+            //TODO: O metoda mai fashion de afisat validare cum ar fi un snackbar?
+            alert(this.state.eroareValidare)
     }
 
     render(){
@@ -76,10 +81,10 @@ class SablonRaspunsDeschis extends React.Component{
                        aria-describedby="inputGroup-sizing-default" onChange={this.handleMaxWords}/>
             </div>
 
-            <button className="btn" onClick={this.handleSave}>Salveaza</button>
+            <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
         </div>
         )
     }
 }
 
-export default SablonRaspunsDeschis;
+export default SablonCreareRaspunsDeschis;

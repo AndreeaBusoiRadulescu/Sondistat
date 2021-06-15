@@ -1,7 +1,7 @@
 import React from "react";
 import {Checkbox, FormGroup} from "@material-ui/core";
 
-class RaspunsMultiplu extends React.Component{
+class IntrebareRaspunsMultiplu extends React.Component{
 
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class RaspunsMultiplu extends React.Component{
                     {
                         this.props.detalii.optiuni.map((optiune, index) => {
                             return (
-                                <label>
+                                <label key={index}>
                                     <Checkbox className="custom-checkbox"/>
                                     <span>{optiune}</span>
                                 </label>
@@ -28,4 +28,4 @@ class RaspunsMultiplu extends React.Component{
     }
 }
 
-export default RaspunsMultiplu;
+export default IntrebareRaspunsMultiplu;
