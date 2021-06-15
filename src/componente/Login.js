@@ -36,19 +36,14 @@ class Login extends React.Component
             var user = result.user;
 
             FirebaseInstance().getUserById(user.uid).then( (dbUser) => {
+                console.log(dbUser)
                 if(dbUser === null){
                     FirebaseInstance().createDbUserFromFirebaseAuthUser(user)
                         .then((insertedUser) => {
                             console.log("Utilizatorul a fost adaugat in baza de date. Are id-ul generat");
-
-                            //Some testing here...
-                            // FirebaseInstance().extractUser(insertedUser).then((user) => {
-                            //     console.log(user);
-                            //     FirebaseInstance().getUserById(user.id).then((user) => {
-                            //         console.log(user);
-                            //     })
-                            // });
-                            //
+                            console.log(insertedUser)
+                            FirebaseInstance().setCurrentUser(insertedUser)
+                            window.location.href = "sondaje"
                         })
                         .catch((error) => {
                             console.error("Nu s-a putut adauga utilizatorul in baza de date!: ", error);
@@ -59,11 +54,9 @@ class Login extends React.Component
                     console.log(dbUser)
                     FirebaseInstance().setCurrentUser(dbUser)
                     console.log(FirebaseInstance().getCurrentUser())
+                    window.location.href = "sondaje"
                 }
 
-                window.location.href = "sondaje"
-                //TODO: Niste toast-uri?
-                // ...
             })
 
         }).catch((error) => {

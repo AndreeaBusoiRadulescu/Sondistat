@@ -15,6 +15,15 @@ class MeniuSondaj extends React.Component{
         window.location.href = "detalii/55"
     }
 
+    onClickStergere() {
+        var answer = window.confirm("Sigur doriti stergerea?");
+        if (answer) {
+            //stergere
+
+        }
+
+    }
+
     render() {
         return(
             <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
@@ -23,7 +32,7 @@ class MeniuSondaj extends React.Component{
                         <h5 className={'pr-2'}>{this.props.sondaj.title}</h5>
                         <div>
                             <FontAwesomeIcon className={'m-2'} icon={faListAlt} onClick={this.onClickDetalii} />
-                            <FontAwesomeIcon className={'m-2'} icon={faTrash}/>
+                            <FontAwesomeIcon className={'m-2'} icon={faTrash} onClick={this.onClickStergere}/>
                         </div>
                     </div>
                 </div>

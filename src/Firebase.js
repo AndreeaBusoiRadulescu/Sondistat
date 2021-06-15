@@ -40,15 +40,17 @@ const FirebaseInstance = (function () {
             return firebase.firestore(this.getInstance())
         },
 
-        createDbUserFromFirebaseAuthUser: function (authUser) {
+        createDbUserFromFirebaseAuthUser: async function (authUser) {
             // Returneaza o promisiune, fiind un apel asincron.
             // Trebuie prinsa si tratata (cu then si catch) de clasa care va apela metoda asta
-            return this.getDatabase().collection("users").add({ //add() va autogenera un id unic
+            let docRef = await this.getDatabase().collection("users").add({ //add() va autogenera un id unic
                 id: authUser.uid,
                 name: authUser.displayName,
                 email: authUser.email,
                 photoURL: authUser.photoURL
             });
+            let docSnap = await docRef.get()
+            return this.extractUser(docSnap)
         },
 
         saveSondaj: async function (title, details, questions) {
@@ -100,8 +102,11 @@ const FirebaseInstance = (function () {
 
         updateUser: function (user) {
             //get the old user document ref
+        },
 
-        }
+        // deleteSondaj: async function (id) {
+        //     await this.getDatabase().collection("sondaje").where("id", "==", id).get().
+        // }
     }
 
 });
