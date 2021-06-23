@@ -2,10 +2,13 @@ import React from "react";
 import MeniuInapoi from "../meniuri_navigare/MeniuInapoi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCopy} from "@fortawesome/free-solid-svg-icons";
+import {faDownload} from "@fortawesome/free-solid-svg-icons";
+
 import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
 import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
 import {renderVectorIntrebari} from "../FunctiiUtile";
+import MeniuSondaj from "../meniuri_componente/MeniuSondaj";
 
 class DetaliiSondaj extends React.Component{
 
@@ -30,7 +33,7 @@ class DetaliiSondaj extends React.Component{
                 "ordine": 1,
                 "tip": 1,
                 "detalii": {
-                    "titlu": "Scrieti numele cainelui dumneavoastra",
+                    "titlu": "Intrebare deschisa",
                     "numarMaxCuvinte": 500
                 }
             },
@@ -38,11 +41,11 @@ class DetaliiSondaj extends React.Component{
                 "ordine": 2,
                 "tip": 2,
                 "detalii": {
-                    "titlu": "Cat de des va spalati pe cap?",
+                    "titlu": "Intrebare raspuns simplu",
                     "optiuni": [
-                        "Mereu",
-                        "Niciodata",
-                        "Asa si asa"
+                        "a",
+                        "b",
+                        "c"
                     ]
                 }
             },
@@ -63,7 +66,11 @@ class DetaliiSondaj extends React.Component{
         }
 
         this.state = {
-            intrebari: []
+            intrebari: [],
+            titlu: "Titlu",
+            detalii: "Detalii",
+            nrRaspunsuri: 10,
+            link: "http://model/123"
         }
     }
 
@@ -82,29 +89,46 @@ class DetaliiSondaj extends React.Component{
         let component = () => {}
 
         return(
-            <div className={"img-container "} id={"back"}>
+            <div className={"img-container"} id={"imagineSondaje"}>
                 <MeniuInapoi/>
-                <div className={"fundal-carduri d-flex flex-column"}>
-                    <div className={"lista-carduri"}>
+                <div className={"d-flex flex-column"}>
+                    <div className={"lista-carduri-detalii"}>
                         <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
-                            <h1>Titlu</h1>
+                            <h1>{this.state.titlu}</h1>
                             <p>Detalii formular</p>
                         </div>
-                        <div className={" d-flex justify-content-between"}>
+                        <div className={"d-flex justify-content-between"}>
                             <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
-                                <h5 className="numeSondaj m-3">Numar raspunsuri:</h5>
-                            </div>
-                            <div className="card shadow-lg rounded-lg min-vw-80 mb-2 mr-3 " id={'sondaj'} >
                                 <div className="d-flex justify-content-between">
-                                    <h5 className="numeSondaj m-3">Link:</h5>
-                                    <FontAwesomeIcon icon={faCopy}/>
+                                    <h5 className="numeSondaj m-3">Numar raspunsuri: {this.state.nrRaspunsuri}</h5>
+                                    <FontAwesomeIcon className={"mt-3 mr-3"} icon={faDownload}/>
+                                </div>
+                            </div>
+                            <div className="card shadow-lg rounded-lg min-vw-80 mb-2 mr-3" id={'sondaj'} >
+                                <div className="d-flex justify-content-between">
+                                    <h5 className="numeSondaj m-3">Link: {this.state.link}</h5>
+                                    <FontAwesomeIcon className={"mt-3 mr-3"} icon={faCopy}/>
                                 </div>
                             </div>
                         </div>
 
-                        {
-                            renderVectorIntrebari(this.state.intrebari)
-                        }
+                        <div className={"d-flex justify-content-between"}>
+                            <div className={"intrebari-detalii d-flex flex-column justify-content-center mr-3"} id={"scrolabil-detalii"}>
+                                {
+                                    renderVectorIntrebari(this.state.intrebari)
+                                }
+                            </div>
+                            <div className="grafice card shadow-lg rounded-lg min-vw-80 mr-3">
+                                <div>Meniu generare grafic</div>
+                                <br/>
+                                <div>-grafic 1</div>
+                                <div>-grafic 2</div>
+                                <br/>
+                                <button className={"m-3"}>Genereaza!</button>
+                                <br/>
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>

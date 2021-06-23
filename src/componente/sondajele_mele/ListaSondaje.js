@@ -46,7 +46,7 @@ class ListaSondaje extends React.Component{
 
     render() {
         return(
-            <div className={"img-container "}>
+            <div className={"img-container"} id={"imagineSondaje"}>
                 <MeniuLogOut/>
                 <div className={"main-container d-flex flex-row justify-content-center"}>
                     <div className={"lista-carduri d-flex flex-column justify-content-center"}>

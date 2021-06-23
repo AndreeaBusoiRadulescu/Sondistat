@@ -42,7 +42,7 @@ code {
   top: 0;
   width: 100%;
   height: fit-content;
-  background-color: #edeef0;
+  background-color: #354356;
 }
 
 
@@ -52,11 +52,11 @@ code {
 }
 
 .titlu:hover{
-  color: #ede1e3;
+  color: whitesmoke;
 }
 
 #model{
-  background-color: #909fa6;
+  background-color: #8AAFB2;
 }
 
 .main-container {
@@ -95,10 +95,24 @@ code {
   margin-bottom: 55px;
 }
 
+.lista-carduri-detalii {
+  position: absolute;
+  top: 63px;
+  margin: auto;
+  left:0;
+  right:0;
+  margin-bottom: 55px;
+}
+
 #scrolabil{
   overflow-y: scroll;
   max-height: 520px;
-  padding-top: 5rem;
+}
+
+#scrolabil-detalii{
+  overflow-y: scroll;
+  max-height: 480px;
+  padding-top: 430px;
 }
 
 #element-lista-model{
@@ -131,7 +145,7 @@ code {
   width: 98% ;
   height: fit-content;
   box-shadow: 0 2px 2px 0 rgb(0 0 0), 0 3px 1px -2px rgb(0 0 0), 0 1px 5px 0 rgb(0 0 0);
-  background-color: #edeef0;
+  background-color: whitesmoke;
 }
 
 #submit{
@@ -164,5 +178,14 @@ code {
 }
 
 #fundal-model{
-  background: #d1dfe8;
+  top:50px;
+  background: #8AAFB2;
+}
+
+.intrebari-detalii{
+  width: 60%;
+}
+
+.grafice{
+  width: 40%
 }

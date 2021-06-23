@@ -195,10 +195,11 @@ class ConstructorDeSondaj extends React.Component{
 
         //Functie ajutatoare care adauga un fel de chenar randarii clasice a intrebarii
         let renderIntrebare = (nrIntrebare, componentaIntrebare) => {
+            let indice = nrIntrebare+1;
             return (
                 <div className="card element-model rounded-lg w-75 mb-3 ml-auto mr-auto">
                     <div className="d-flex flex-row justify-content-between pl-3 pt-1 pr-1">
-                        <p className="text-body"><b>{'Intrebarea #' + nrIntrebare}</b></p>
+                        <p className="text-body"><b>{'Intrebarea #' + indice}</b></p>
                         <div>
                             <IconitaMutaDedesupt nrIntrebare={nrIntrebare}/>
                             <IconitaMutaDeasupra nrIntrebare={nrIntrebare}/>
@@ -237,7 +238,10 @@ class ConstructorDeSondaj extends React.Component{
         return (
             <div>
                 <div className="bg-white p-2 mb-3 mt-3 align-content-center">
+
+                    <hr/>
                     <h5 className="text-body mb-0 p-1"><b>{"Numar total intrebari: " + this.state.intrebari.length}</b></h5>
+                    <hr/>
                     {
                         this.state.intrebari.map((intrebare, index) => {
                             if (intrebare.tip === INTREBARE_RASPUNS_DESCHIS) {
@@ -265,7 +269,7 @@ class ConstructorDeSondaj extends React.Component{
 
     render() {
         return(
-            <div className={"img-container "} id={"imagineSondaje"}>
+            <div>
                 <MeniuInapoi/>
                 <div className={"fundal-carduri-model d-flex flex-column"}>
                     <div className={"lista-carduri-model"}>
