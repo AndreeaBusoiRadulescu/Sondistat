@@ -84,6 +84,15 @@ const DatabaseInstance = (function () {
             return sondaje
         },
 
+        getSondajById: async function (idSondaj){
+            let query = await this.getDatabase().collection("sondaje").where("id", "==", idSondaj).get();
+            let sondaj = query.docs[0]
+            if(typeof sondaj === 'undefined') {
+                return null
+            }
+            return await sondaj.data()
+        },
+
         extractUser: async function (documentSnapshot) {
             let snapshot = await documentSnapshot.data();
             return snapshot;
@@ -104,14 +113,37 @@ const DatabaseInstance = (function () {
             return await this.extractUser(user);
         },
 
-        updateUser: function (user) {
-            //get the old user document ref
+        saveCompletareSondaj: async function (sondajId, raspunsuri) {
+            console.log(sondajId)
+            console.log(raspunsuri)
+            let docRef = await this.getDatabase().collection("raspunsuri").add({
+                sondajId: sondajId,
+                raspunsuri: raspunsuri
+            });
+
+            await docRef.update({
+                id: docRef.id
+            })
         },
 
+        getCompletariSondaj: async function(sondajId){
+            let query = await this.getDatabase().collection("raspunsuri").where("sondajId", "==", sondajId).get();
+            let snapShots = query.docs
+            if(typeof snapShots === 'undefined'){
+                return null
+            }
+            let raspunsuriSondaj = []
+            snapShots.forEach((snapshot) => {
+                raspunsuriSondaj.push(snapshot.data())
+            })
+            return raspunsuriSondaj
+        },
 
-        // deleteSondaj: async function (id) {
-        //     await this.getDatabase().collection("sondaje").where("id", "==", id).get().
-        // }
+        deleteSondaj: async function (id) {
+            let query = await this.getDatabase().collection("sondaje").where("id", "==", id).get()
+            let reference = await query.docs[0].ref
+            await reference.delete()
+        }
     }
 
 });

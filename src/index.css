@@ -95,6 +95,10 @@ code {
   margin-bottom: 55px;
 }
 
+body{
+  overflow-x: hidden;
+}
+
 .lista-carduri-detalii {
   position: absolute;
   top: 63px;
@@ -105,15 +109,13 @@ code {
 }
 
 #scrolabil{
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 520px;
-  overflow-x: hidden;
 }
 
 #scrolabil-detalii{
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 480px;
-  padding-top: 430px;
 }
 
 #element-lista-model{

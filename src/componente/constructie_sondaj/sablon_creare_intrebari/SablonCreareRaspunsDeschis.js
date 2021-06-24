@@ -10,7 +10,7 @@ class SablonCreareRaspunsDeschis extends React.Component{
         this.handleIntrebare = this.handleIntrebare.bind(this)
         this.handleSave = this.handleSave.bind(this)
 
-        //Raspunsul deschis are o intrebare, numar maxim de cuvinte si eroareDeValidare
+        //Raspunsul deschis are o intrebare, numar maxim de caractere si eroareDeValidare
         this.state = {
             maxWords: "",
             intrebare: "",
@@ -34,7 +34,7 @@ class SablonCreareRaspunsDeschis extends React.Component{
         await this.setState({eroareValidare: ""})
 
         if (!this.state.maxWords || isNaN(this.state.maxWords)) {
-            await this.setState({eroareValidare: "Numarul de cuvinte trebuie exprimat in cifre!"})
+            await this.setState({eroareValidare: "Numarul de caractere trebuie exprimat in cifre!"})
         }
 
         console.log(!this.state.maxWords)
@@ -75,7 +75,7 @@ class SablonCreareRaspunsDeschis extends React.Component{
             </div>
             <div className="input-group mb-3">
                 <div className="input-group-prepend">
-                    <span className="input-group-text" id="inputGroup-sizing-default">Numarul maxim de cuvinte</span>
+                    <span className="input-group-text" id="inputGroup-sizing-default">Numarul maxim de caractere</span>
                 </div>
                 <input type="text" className="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default" onChange={this.handleMaxWords}/>

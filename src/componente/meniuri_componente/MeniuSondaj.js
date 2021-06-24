@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faListAlt } from '@fortawesome/free-solid-svg-icons';
+import DatabaseInstance from "../../Database";
 
 
 class MeniuSondaj extends React.Component{
@@ -9,19 +10,20 @@ class MeniuSondaj extends React.Component{
     constructor(props) {
         super(props);
         this.onClickDetalii = this.onClickDetalii.bind(this);
+        this.onClickStergere = this.onClickStergere.bind(this);
     }
 
     onClickDetalii() {
-        window.location.href = "detalii/55"
+        window.location.href = "detalii/" + this.props.sondaj.id
     }
 
-    onClickStergere() {
-        var answer = window.confirm("Sigur doriti stergerea?");
+    async onClickStergere() {
+        let answer = window.confirm("Sigur doriti stergerea?");
         if (answer) {
             //stergere
-
+            await DatabaseInstance().deleteSondaj(this.props.sondaj.id)
+            window.location.href = "sondaje"
         }
-
     }
 
     render() {

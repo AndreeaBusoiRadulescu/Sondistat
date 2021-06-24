@@ -33,6 +33,7 @@ class ListaSondaje extends React.Component{
         //Luam sondajele
         DatabaseInstance().getCurrentUserSondaje().then((sondaje) => {
             this.setState({sondajeleMele: sondaje})
+            console.log(sondaje)
         })
     }
 
@@ -51,7 +52,7 @@ class ListaSondaje extends React.Component{
                 <div className={"main-container d-flex flex-row justify-content-center"}>
                     <div className={"lista-carduri d-flex flex-column justify-content-center"}>
                         <MeniuAdaugareSondajNou/>
-                        <div className={"d-flex flex-column justify-content-center mr-3"} id={"scrolabil"}>
+                        <div className={"d-flex flex-column justify-content-start mr-3"} id={"scrolabil"}>
                         {
                             this.state.sondajeleMele.map((sondaj, index) => {
                                 return <MeniuSondaj key={index} sondaj={sondaj}/>

@@ -61,7 +61,7 @@ class App extends React.Component{
               <IntrebareRaspunsDeschis />
             </Route>
 
-            <Route path="/model">
+            <Route path="/completare">
               <FormularCompletare />
             </Route>
 
