@@ -2,7 +2,7 @@ import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis
 import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
 import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import React from "react";
-import {renderVectorIntrebari} from "../FunctiiUtile";
+import {renderVectorIntrebari} from "../FunctieAfisare";
 import DatabaseInstance from "../../Database";
 
 class FormularCompletare extends React.Component {

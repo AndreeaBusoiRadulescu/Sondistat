@@ -20,7 +20,6 @@ class MeniuSondaj extends React.Component{
     async onClickStergere() {
         let answer = window.confirm("Sigur doriti stergerea?");
         if (answer) {
-            //stergere
             await DatabaseInstance().deleteSondaj(this.props.sondaj.id)
             window.location.href = "sondaje"
         }

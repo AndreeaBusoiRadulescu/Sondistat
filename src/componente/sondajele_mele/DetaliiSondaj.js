@@ -7,10 +7,11 @@ import {faDownload} from "@fortawesome/free-solid-svg-icons";
 import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
 import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
-import {renderVectorIntrebari} from "../FunctiiUtile";
+import {renderVectorIntrebariDetalii} from "./AfisareIntrebariPentruDetalii";
 import MeniuSondaj from "../meniuri_componente/MeniuSondaj";
 import Database from "../../Database";
 import DatabaseInstance from "../../Database";
+import {FormControlLabel, Radio, RadioGroup} from "@material-ui/core";
 
 class DetaliiSondaj extends React.Component{
 
@@ -63,7 +64,28 @@ class DetaliiSondaj extends React.Component{
     }
 
     exportClicked(e){
-        alert(JSON.stringify(this.raspunsuri, null, 2))
+        // alert(JSON.stringify(this.raspunsuri, null, 2))
+        let jsonFileData = JSON.stringify(this.raspunsuri, null, 2);
+
+        // //define the heading for each row of the data
+        // var csv = 'Name,Profession\n';
+        //
+        // //merge the data with CSV
+        // csvFileData.forEach(function(row) {
+        //     csv += row.join(',');
+        //     csv += "\n";
+        // });
+
+        //display the created CSV data on the web browser
+        // document.write(jsonFileData);
+
+
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/json;charset=utf-8,' + encodeURI(jsonFileData);
+        hiddenElement.target = '_blank';
+
+        hiddenElement.download = 'raspunsuri.json';
+        hiddenElement.click();
     }
 
     render() {
@@ -88,7 +110,7 @@ class DetaliiSondaj extends React.Component{
                                                          onClick={this.exportClicked}/>
                                     </div>
                                 </div>
-                                <div className="col-md-5 card shadow-lg rounded-lg mb-2" id={'sondaj'} >
+                                <div className="col-md-5 card shadow-lg rounded-lg mb-2 mr-3" id={'sondaj'} >
                                     <div className="d-flex justify-content-between">
                                         <h6 className="numeSondaj m-3">Link:</h6>
                                         <a className={"mt-3"} href={this.state.link}>{this.state.link}</a>
@@ -99,19 +121,30 @@ class DetaliiSondaj extends React.Component{
 
 
 
-                        <div className={"row"}>
+                        <div className={"row mr-3"}>
                             <div className={"col intrebari-detalii d-flex flex-column justify-content-start mr-3"} id={"scrolabil-detalii"}>
                                 {
-                                    renderVectorIntrebari(this.state.intrebari)
+                                    renderVectorIntrebariDetalii(this.state.intrebari)
                                 }
                             </div>
-                            <div className="col grafice card shadow-lg rounded-lg min-vw-80 mr-3">
-                                <div>Meniu generare grafic</div>
+                            <div className="col grafice card shadow-lg rounded-lg min-vw-80">
                                 <br/>
-                                <div>-grafic 1</div>
-                                <div>-grafic 2</div>
+                                <h5>Meniu generare grafic</h5>
                                 <br/>
-                                <button className={"m-3"}>Genereaza!</button>
+                                {/*<RadioGroup>*/}
+                                {/*    {*/}
+                                {/*        <label>*/}
+                                {/*            <FormControlLabel control={<Radio/>}/>*/}
+                                {/*            <span>Grafic de frecventa</span>*/}
+                                {/*            <br/>*/}
+                                {/*            <FormControlLabel control={<Radio/>}/>*/}
+                                {/*            <span>Grafic de regresie</span>*/}
+                                {/*        </label>*/}
+                                {/*    }*/}
+                                {/*</RadioGroup>*/}
+                                <p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>
+                                <br/>
+                                {/*<button className={"m-3"}>Genereaza!</button>*/}
                                 <br/>
                             </div>
                         </div>
