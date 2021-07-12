@@ -3,15 +3,11 @@ import MeniuInapoi from "../meniuri_navigare/MeniuInapoi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCopy} from "@fortawesome/free-solid-svg-icons";
 import {faDownload} from "@fortawesome/free-solid-svg-icons";
-
-import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
-import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
-import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
 import {renderVectorIntrebariDetalii} from "./AfisareIntrebariPentruDetalii";
-import MeniuSondaj from "../meniuri_componente/MeniuSondaj";
-import Database from "../../Database";
 import DatabaseInstance from "../../Database";
-import {FormControlLabel, Radio, RadioGroup} from "@material-ui/core";
+import 'reactjs-popup/dist/index.css';
+import FereastraGrafic from "./FereastraGrafic";
+
 
 class DetaliiSondaj extends React.Component{
 
@@ -31,8 +27,10 @@ class DetaliiSondaj extends React.Component{
             link: "http://model/123"
         }
 
-        this.exportClicked = this.exportClicked.bind(this)
+        this.exportClicked = this.exportClicked.bind(this);
+        // const domContainer = document.querySelector('#app');
     }
+
 
     async componentDidMount() {
         //id-ul sondajului afisat
@@ -63,6 +61,7 @@ class DetaliiSondaj extends React.Component{
         })
     }
 
+
     exportClicked(e){
         // alert(JSON.stringify(this.raspunsuri, null, 2))
         let jsonFileData = JSON.stringify(this.raspunsuri, null, 2);
@@ -87,6 +86,7 @@ class DetaliiSondaj extends React.Component{
         hiddenElement.download = 'raspunsuri.json';
         hiddenElement.click();
     }
+
 
     render() {
 
@@ -144,7 +144,7 @@ class DetaliiSondaj extends React.Component{
                                 {/*</RadioGroup>*/}
                                 <p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>
                                 <br/>
-                                {/*<button className={"m-3"}>Genereaza!</button>*/}
+                                <FereastraGrafic/>
                                 <br/>
                             </div>
                         </div>

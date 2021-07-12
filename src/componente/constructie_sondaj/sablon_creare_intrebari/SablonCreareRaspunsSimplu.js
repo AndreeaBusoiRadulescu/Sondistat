@@ -1,6 +1,8 @@
 import React from "react";
 import {FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup} from "@material-ui/core";
 import {INTREBARE_RASPUNS_SIMPLU} from "../../intrebari_sondaj/EnumTipIntrebari";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import {Alert} from "@material-ui/lab";
 
 class SablonCreareRaspunsSimplu extends React.Component{
 
@@ -15,7 +17,8 @@ class SablonCreareRaspunsSimplu extends React.Component{
         this.state = {
             intrebare: "",
             eroareValidare: "",
-            varianteRaspuns: []
+            varianteRaspuns: [],
+            snackbar: false
         }
     }
 
@@ -26,14 +29,14 @@ class SablonCreareRaspunsSimplu extends React.Component{
         //Verificare daca varianta nu e nula
         if(!variantaRaspuns || variantaRaspuns.length < 1){
             await this.setState({eroareValidare: "Varianta de raspuns nu poate fi goala!"})
-            alert(this.state.eroareValidare)
+            this.state.snackbar = true;
             return
         }
 
         //Verificare daca varianta exista deja
         if(this.state.varianteRaspuns.includes(variantaRaspuns)){
             await this.setState({eroareValidare: "Varianta de raspuns exista deja!"})
-            alert(this.state.eroareValidare)
+            this.state.snackbar = true;
             return
         }
 
@@ -76,9 +79,10 @@ class SablonCreareRaspunsSimplu extends React.Component{
                 }
             })
         }
-        else
-            //TODO: O metoda mai fashion de afisat validare cum ar fi un snackbar?
-            alert(this.state.eroareValidare)
+        else{
+            this.state.snackbar = true;
+        }
+
     }
 
     //Folosita pentru ca vreau ca SablonIntrebareRaspunsMultiplu sa mosteneasca clasa
@@ -124,6 +128,12 @@ class SablonCreareRaspunsSimplu extends React.Component{
                 </FormControl>
 
                 <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
+
+                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                    <Alert  severity="error">
+                        {this.state.eroareValidare}
+                    </Alert>
+                </Snackbar>
             </div>
         )
     }

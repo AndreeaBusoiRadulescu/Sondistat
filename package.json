@@ -15,6 +15,7 @@
     "firebase": "^8.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-google-charts": "^3.0.15",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.0"
@@ -46,6 +47,8 @@
   "devDependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-    "istanbul-lib-coverage": "^3.0.0"
+    "istanbul-lib-coverage": "^3.0.0",
+    "react-modal": "^3.14.3",
+    "reactjs-popup": "^2.0.4"
   }
 }

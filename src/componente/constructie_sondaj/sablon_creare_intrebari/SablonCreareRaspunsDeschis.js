@@ -1,5 +1,7 @@
 import React from "react";
 import {INTREBARE_RASPUNS_DESCHIS} from "../../intrebari_sondaj/EnumTipIntrebari";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import {Alert} from "@material-ui/lab";
 
 class SablonCreareRaspunsDeschis extends React.Component{
 
@@ -14,7 +16,8 @@ class SablonCreareRaspunsDeschis extends React.Component{
         this.state = {
             maxWords: "",
             intrebare: "",
-            eroareValidare: ""
+            eroareValidare: "",
+            snackbar: false
         }
     }
 
@@ -58,9 +61,9 @@ class SablonCreareRaspunsDeschis extends React.Component{
                 }
             })
         }
-        else
-            //TODO: O metoda mai fashion de afisat validare cum ar fi un snackbar?
-            alert(this.state.eroareValidare)
+        else {
+            this.state.snackbar = true;
+        }
     }
 
     render(){
@@ -82,6 +85,12 @@ class SablonCreareRaspunsDeschis extends React.Component{
             </div>
 
             <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
+
+            <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                <Alert  severity="error">
+                    {this.state.eroareValidare}
+                </Alert>
+            </Snackbar>
         </div>
         )
     }

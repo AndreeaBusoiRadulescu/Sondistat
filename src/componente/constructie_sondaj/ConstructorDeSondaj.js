@@ -9,6 +9,8 @@ import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultip
 import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import {faArrowDown, faArrowUp, faListAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Alert} from "@material-ui/lab";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 
 const INTREBARE_RASPUNS_DESCHIS = 1
 const INTREBARE_RASPUNS_SIMPLU = 2
@@ -25,7 +27,8 @@ class ConstructorDeSondaj extends React.Component{
             detalii: "",
             intrebari: [],
             tipIntrebareNoua: 0,
-            eroareValidare: ""
+            eroareValidare: "",
+            snackbar: false
         }
 
         this.handleDetailsChange = this.handleDetailsChange.bind(this);
@@ -128,8 +131,10 @@ class ConstructorDeSondaj extends React.Component{
                 window.location.href = "sondaje"
             })
         }
-        else
-            alert(this.state.eroareValidare)
+        else{
+            this.state.snackbar = true;
+        }
+
     }
 
     //Functie ajutatoare de render ca sa nu incarcam asa tare functia principala de render
@@ -325,6 +330,11 @@ class ConstructorDeSondaj extends React.Component{
                         </div>
                     </div>
                 </div>
+                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                    <Alert  severity="error">
+                        {this.state.eroareValidare}
+                    </Alert>
+                </Snackbar>
             </div>
         )
     }
