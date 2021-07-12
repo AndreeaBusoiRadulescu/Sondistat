@@ -6,36 +6,6 @@ class IntrebareRaspunsSimplu extends React.Component{
 
     constructor(props) {
         super(props);
-        this.radioChecked = this.radioChecked.bind(this)
-
-        this.state = {
-            raspuns : null,
-            eroareValidare: null
-        }
-    }
-
-    radioChecked(e, index){
-        //S-a bifat/debifat raspunsul de pe pozitia index
-        //Cum exista un singur raspuns, atunci cand se bifeaza raspunsul X, 100% nu mai exista si alt raspuns bifat
-        //Deci e de ajuns sa stim ca raspunsul s-a bifat si sa-l actualizam in state
-        if(e.target.checked){
-            this.setState({
-                raspuns: this.props.detalii.optiuni[index],
-                eroareValidare: null
-            })
-        }
-    }
-
-    getRaspuns(){
-
-        if(this.state.raspuns === null){
-            //Eroare de validare
-            this.setState({
-                eroareValidare: "* Intrebarea este obligatorie!"
-            })
-        }
-
-        return this.state.raspuns //null sau string
     }
 
     render() {
@@ -43,11 +13,10 @@ class IntrebareRaspunsSimplu extends React.Component{
             <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2" id={'element-lista-model'}>
                 <div className={"d-flex justify-content-between"}>
                     {this.props.detalii.titlu}
-                    <label>
-                        <Checkbox className="custom-checkbox"/>
+                    <label style={{display: (this.props.displayCheckBox ? "block" : "none")}}>
+                        <Checkbox className="custom-checkbox" onChange={(e) => this.props.onCheckBoxChecked(e, this.props.index)}/>
                     </label>
                 </div>
-                <p className="text-danger text-left">{this.state.eroareValidare}</p>
                 <FormControl component="fieldset">
                     <RadioGroup>
                         {

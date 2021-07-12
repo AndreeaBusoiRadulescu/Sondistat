@@ -3,15 +3,20 @@ import MeniuInapoi from "../meniuri_navigare/MeniuInapoi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCopy} from "@fortawesome/free-solid-svg-icons";
 import {faDownload} from "@fortawesome/free-solid-svg-icons";
-
-import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
-import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
-import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
-import {renderVectorIntrebariDetalii} from "./AfisareIntrebariPentruDetalii";
-import MeniuSondaj from "../meniuri_componente/MeniuSondaj";
-import Database from "../../Database";
 import DatabaseInstance from "../../Database";
-import {FormControlLabel, Radio, RadioGroup} from "@material-ui/core";
+import {Statistics} from 'statistics.js'
+import 'reactjs-popup/dist/index.css';
+import FereastraGrafic from "./FereastraGrafic";
+import {
+    INTREBARE_RASPUNS_DESCHIS,
+    INTREBARE_RASPUNS_MULTIPLU,
+    INTREBARE_RASPUNS_SIMPLU
+} from "../intrebari_sondaj/EnumTipIntrebari";
+import SablonSelectareRaspunsDeschis from "./sablon_selectare_intrebari/SablonSelectareRaspunsDeschis";
+import SablonSelectareRaspunsMultiplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsMultiplu";
+import SablonSelectareRaspunsSimplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsSimplu";
+import {parse} from "@fortawesome/fontawesome-svg-core";
+
 
 class DetaliiSondaj extends React.Component{
 
@@ -28,11 +33,15 @@ class DetaliiSondaj extends React.Component{
             titlu: "Titlu",
             detalii: "Detalii",
             nrRaspunsuri: null,
-            link: "http://model/123"
+            link: "http://model/123",
+            intrebariSelectate: []
         }
 
-        this.exportClicked = this.exportClicked.bind(this)
+        this.exportClicked = this.exportClicked.bind(this);
+        this.onChildCheckBoxChecked = this.onChildCheckBoxChecked.bind(this)
+        // const domContainer = document.querySelector('#app');
     }
+
 
     async componentDidMount() {
         //id-ul sondajului afisat
@@ -44,7 +53,9 @@ class DetaliiSondaj extends React.Component{
             intrebari: sondaj.questions,
             titlu: sondaj.title,
             detalii: sondaj.details,
-            link: window.location.origin + "/completare/" + sondaj.id
+            link: window.location.origin + "/completare/" + sondaj.id,
+            //By default nu este nicio intrebare selectata pt grafic (toate sunt cu false)
+            intrebariSelectate: Array(sondaj.questions.length).fill(false)
         })
 
         //Luam toate completarile sondajului din baza de date
@@ -62,6 +73,7 @@ class DetaliiSondaj extends React.Component{
             nrRaspunsuri: this.raspunsuri.length
         })
     }
+
 
     exportClicked(e){
         // alert(JSON.stringify(this.raspunsuri, null, 2))
@@ -88,9 +100,134 @@ class DetaliiSondaj extends React.Component{
         hiddenElement.click();
     }
 
+    conversieLaVector(data){
+        if(typeof data === "string"){
+            //Stim sigur ca e un numar sub forma de string => conversie la un vector de un sigur element de tip numar
+            return [parseFloat(data)]
+        }
+
+        if(typeof data === "object"){
+            //Stim sigur ca e un obiect de tip Array => conversie la un vector de numere
+            return data.map(elem => parseFloat(elem))
+        }
+    }
+
+    getSetDateIntrebariSelectate(){
+        let setDate = []
+        let indexIntrebariSelectate = []
+
+        for(let index = 0; index < this.state.intrebariSelectate.length; index++){
+            if(this.state.intrebariSelectate[index] === true){
+                indexIntrebariSelectate.push(index)
+            }
+        }
+
+        //Stim indecsii celor doua intrebari selectate pentru analiza grafica
+        //Acum vom trece prin toate raspunsurile primite si vom face perechi intre variantele de raspuns ale celor 2 intrebari
+        //Exemplu: "intrebare 1": "5"; "intrebare 2" : "7, 8"
+        //Perechile rezultate vor fi (produs cartezian): [5, 7], [5, 8]
+
+        this.raspunsuri.forEach(raspuns => {
+            let X = raspuns[indexIntrebariSelectate[0]]
+            let Y = raspuns[indexIntrebariSelectate[1]]
+
+            X = this.conversieLaVector(X)
+            Y = this.conversieLaVector(Y)
+
+            console.log("X SI Y")
+            console.log(X)
+            console.log(Y)
+
+            //Fac pereche pentru fiecare x din X cu un y din Y
+            X.forEach(x => {
+                Y.forEach(y => {
+                    setDate.push([x, y])
+                })
+            })
+        })
+
+        let tabHeader = [this.state.intrebari[indexIntrebariSelectate[0]].detalii.titlu, this.state.intrebari[indexIntrebariSelectate[1]].detalii.titlu]
+        setDate = [tabHeader].concat(setDate)
+        // console.log(setDate)
+
+        let X = setDate.map(date => date[0]).filter(date => !isNaN(date))
+        let Y = setDate.map(date => date[1]).filter(date => !isNaN(date))
+        console.log(X)
+        console.log(Y)
+        let limite = {
+            minX: Math.min(...X) - 2,
+            maxX: Math.max(...X) + 2,
+            minY: Math.min(...Y) - 2,
+            maxY: Math.max(...Y) + 2
+        }
+
+        console.log("LIMITE")
+        console.log(limite)
+
+        //Prelucram setul de date pentru a face regresie liniara
+        let statsData = []
+        setDate.slice(1).forEach(data => {
+            statsData.push({x: data[0], y: data[1]})
+        })
+
+        let metrics = {
+            x: 'metric',
+            y: 'metric'
+        }
+
+        console.log(statsData)
+
+        let stats = new Statistics(statsData, metrics)
+        let regression = stats.linearRegression('x', 'y')
+        console.log(regression)
+
+        return [setDate, limite, regression]
+    }
+
+    getNumarIntrebariSelectate(){
+        return this.state.intrebariSelectate.filter(selectie => (selectie === true)).length
+    }
+
+    async onChildCheckBoxChecked(e, childIndex) {
+
+        if(e.target.checked){
+            //Verificam daca sunt cel mult doua intrebari selectate
+            let nrIntrebariSelectate = this.getNumarIntrebariSelectate()
+            if(nrIntrebariSelectate >= 2) {
+                e.target.click()
+                alert("Nu se pot selecta mai mult de 2 intrebari pentru realizarea graficului!!!")
+                return;
+            }
+        }
+
+        let vectorVechi = this.state.intrebariSelectate
+        vectorVechi[childIndex] = e.target.checked //actualizam selectia cu false sau true daca e bifat sau debifat
+
+        await this.setState({intrebariSelectate: vectorVechi}) //actualizam in state vectorul de selectii
+        console.log(this.state.intrebariSelectate)
+    }
+
+    esteBunaPentruAnaliza(indexIntrebare){
+        //O intrebare poate face parte din analiza doar daca are toate raspunsurile posibile de tipul number.
+        //Verificam deci daca intrebarea are doar raspunsuri de tip number.
+        let intrebare = this.state.intrebari[indexIntrebare]
+
+        //Daca intrebarea nu are optiuni (e de tip raspuns deschis) => nu poate fi bagata la analiza
+        if(intrebare.detalii.optiuni === undefined) return false
+
+        let nrRaspunsuriDeTipNumar = intrebare.detalii.optiuni.filter(optiune => (!isNaN(optiune))).length
+
+        //Daca numarul raspunsurilor de tip numar === numer raspunsuri totale => toate raspunsurile sunt de tip Numar
+        return nrRaspunsuriDeTipNumar === intrebare.detalii.optiuni.length;
+    }
+
+
+
     render() {
 
-        let component = () => {}
+        let graficData = undefined
+        if(this.getNumarIntrebariSelectate() === 2)
+            graficData = this.getSetDateIntrebariSelectate()
 
         return(
             <div className={"img-container"} id={"imagineSondaje"}>
@@ -124,7 +261,40 @@ class DetaliiSondaj extends React.Component{
                         <div className={"row mr-3"}>
                             <div className={"col intrebari-detalii d-flex flex-column justify-content-start mr-3"} id={"scrolabil-detalii"}>
                                 {
-                                    renderVectorIntrebariDetalii(this.state.intrebari)
+                                    this.state.intrebari.map((intrebare, index) => {
+                                        // returneaza elementul si paseaza cheia
+
+                                        let componentaCreata
+
+                                        if (intrebare.tip === INTREBARE_RASPUNS_DESCHIS) {
+                                            componentaCreata = (
+                                                <div>
+                                                    <SablonSelectareRaspunsDeschis key={index} index={index} detalii={intrebare.detalii}
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                </div>
+                                            )
+                                        } else if (intrebare.tip === INTREBARE_RASPUNS_MULTIPLU) {
+                                            componentaCreata = (
+                                                <div>
+                                                    <SablonSelectareRaspunsMultiplu key={index} index={index} detalii={intrebare.detalii}
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                </div>
+                                            )
+                                        } else if (intrebare.tip === INTREBARE_RASPUNS_SIMPLU) {
+                                            componentaCreata = (
+                                                <div>
+                                                    <SablonSelectareRaspunsSimplu key={index} index={index} detalii={intrebare.detalii}
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                </div>
+                                            )
+                                        } else {
+                                            console.log("Nu am putut coverti intrebarea " + intrebare + " in componenta!")
+                                            componentaCreata = (
+                                                <div key={index}>Componenta invalida!</div>
+                                            )
+                                        }
+                                        return componentaCreata
+                                    })
                                 }
                             </div>
                             <div className="col grafice card shadow-lg rounded-lg min-vw-80">
@@ -144,7 +314,13 @@ class DetaliiSondaj extends React.Component{
                                 {/*</RadioGroup>*/}
                                 <p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>
                                 <br/>
-                                {/*<button className={"m-3"}>Genereaza!</button>*/}
+                                <div>
+                                    {
+                                        (this.getNumarIntrebariSelectate() === 2) && (<FereastraGrafic setDate={graficData[0]} limite={graficData[1]}
+                                            regresie={graficData[2]}/>)
+                                    }
+                                </div>
+
                                 <br/>
                             </div>
                         </div>
