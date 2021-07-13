@@ -4,7 +4,7 @@ import Chart from "react-google-charts";
 
 // Modal.setAppElement('#root');
 
-class FereastraGrafic extends React.Component{
+class FereastraRegresie extends React.Component{
 
     constructor(props) {
         super(props);
@@ -17,8 +17,6 @@ class FereastraGrafic extends React.Component{
         this.openModal = this.openModal.bind(this)
         this.afterOpenModal = this.afterOpenModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
-
-
     }
 
     componentDidMount() {
@@ -41,7 +39,7 @@ class FereastraGrafic extends React.Component{
     render (){
         return (
         <div>
-            <button className="btn btn-secondary m-auto" onClick={this.openModal}>Afiseaza grafic</button>
+            <button className="btn btn-secondary m-auto" onClick={this.openModal}>Afiseaza grafic de frecventa</button>
             <Modal
                 isOpen={this.state.modalIsOpen}
                 onAfterOpen={this.afterOpenModal}
@@ -53,27 +51,7 @@ class FereastraGrafic extends React.Component{
                 <div className="container">
                     <div className="row">
                         <div className="col-6" style={{width: 600, height: 400, maxWidth: "100%"}}>
-                            <Chart
-                                key={this.state.minX}
-                                width={'600px'}
-                                height={'400px'}
-                                chartType="ScatterChart"
-                                loader={<div>Loading Chart</div>}
-                                /*data={[
-                                    ['Varsta', 'Numar ore necesare'],
-                                    [30, 3], [50, 5], [22, 2], [36, 4], [25, 1], [41, 4],
-                                    [61, 7], [55, 6], [24, 2], [38, 3], [44, 4], [20, 2], [50, 4],
-                                    [43, 3], [62, 6], [33, 3], [36, 3], [43, 5], [20, 1], [31, 2]
-                                ]}*/
-                                data={this.props.setDate}
-                                options={{
-                                    title: 'Comparare vasta si ore necesare pentru adaptarea la noul soft',
-                                    hAxis: { title: this.props.setDate[0][0], minValue: this.props.limite.minX, maxValue: this.props.limite.maxX },
-                                    vAxis: { title: this.props.setDate[0][1], minValue: this.props.limite.minY, maxValue: this.props.limite.maxY },
-                                    legend: 'none',
-                                }}
-                                rootProps={{ 'data-testid': '1' }}
-                            />
+
 
                         </div>
 
@@ -84,9 +62,6 @@ class FereastraGrafic extends React.Component{
                         </div>
                     </div>
 
-                    <div className="row">
-                        <p>{JSON.stringify(this.props.regresie)}</p>
-                    </div>
                 </div>
 
                 <div className={"d-flex justify-content-end"}>
@@ -99,4 +74,4 @@ class FereastraGrafic extends React.Component{
     }
 }
 
-export default FereastraGrafic;
+export default FereastraRegresie;

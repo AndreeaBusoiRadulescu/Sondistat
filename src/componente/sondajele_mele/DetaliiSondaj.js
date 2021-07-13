@@ -6,7 +6,7 @@ import {faDownload} from "@fortawesome/free-solid-svg-icons";
 import DatabaseInstance from "../../Database";
 import {Statistics} from 'statistics.js'
 import 'reactjs-popup/dist/index.css';
-import FereastraGrafic from "./FereastraGrafic";
+import FereastraRegresie from "./FereastraRegresie";
 import {
     INTREBARE_RASPUNS_DESCHIS,
     INTREBARE_RASPUNS_MULTIPLU,
@@ -16,6 +16,7 @@ import SablonSelectareRaspunsDeschis from "./sablon_selectare_intrebari/SablonSe
 import SablonSelectareRaspunsMultiplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsMultiplu";
 import SablonSelectareRaspunsSimplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsSimplu";
 import {parse} from "@fortawesome/fontawesome-svg-core";
+import FereastraFrecventa from "./FereastraFrecventa";
 
 
 class DetaliiSondaj extends React.Component{
@@ -112,15 +113,14 @@ class DetaliiSondaj extends React.Component{
         }
     }
 
+    getSetDateIntrebareSelectata() {
+        return []
+    }
+
     getSetDateIntrebariSelectate(){
         let setDate = []
-        let indexIntrebariSelectate = []
 
-        for(let index = 0; index < this.state.intrebariSelectate.length; index++){
-            if(this.state.intrebariSelectate[index] === true){
-                indexIntrebariSelectate.push(index)
-            }
-        }
+        let indexIntrebariSelectate = this.getIndexIntrebariSelectate()
 
         //Stim indecsii celor doua intrebari selectate pentru analiza grafica
         //Acum vom trece prin toate raspunsurile primite si vom face perechi intre variantele de raspuns ale celor 2 intrebari
@@ -188,6 +188,18 @@ class DetaliiSondaj extends React.Component{
         return this.state.intrebariSelectate.filter(selectie => (selectie === true)).length
     }
 
+    getIndexIntrebariSelectate(){
+        let indexIntrebariSelectate = []
+
+        for(let index = 0; index < this.state.intrebariSelectate.length; index++){
+            if(this.state.intrebariSelectate[index] === true){
+                indexIntrebariSelectate.push(index)
+            }
+        }
+
+        return indexIntrebariSelectate
+    }
+
     async onChildCheckBoxChecked(e, childIndex) {
 
         if(e.target.checked){
@@ -195,7 +207,7 @@ class DetaliiSondaj extends React.Component{
             let nrIntrebariSelectate = this.getNumarIntrebariSelectate()
             if(nrIntrebariSelectate >= 2) {
                 e.target.click()
-                alert("Nu se pot selecta mai mult de 2 intrebari pentru realizarea graficului!!!")
+                alert("Nu se pot selecta mai mult de 2 intrebari!")
                 return;
             }
         }
@@ -207,7 +219,7 @@ class DetaliiSondaj extends React.Component{
         console.log(this.state.intrebariSelectate)
     }
 
-    esteBunaPentruAnaliza(indexIntrebare){
+    esteBunaPentruRegresie(indexIntrebare){
         //O intrebare poate face parte din analiza doar daca are toate raspunsurile posibile de tipul number.
         //Verificam deci daca intrebarea are doar raspunsuri de tip number.
         let intrebare = this.state.intrebari[indexIntrebare]
@@ -221,13 +233,49 @@ class DetaliiSondaj extends React.Component{
         return nrRaspunsuriDeTipNumar === intrebare.detalii.optiuni.length;
     }
 
+    esteBunaPentruAnaliza(indexIntrebare){
+        return this.state.intrebari[indexIntrebare].tip !== INTREBARE_RASPUNS_DESCHIS
+    }
 
+    trebuieCheckBox(indexIntrebare){
+
+        console.log(this.raspunsuri)
+
+        if(this.raspunsuri === undefined || this.raspunsuri.length === 0)
+            return false
+
+        let indexIntrebariSelectate = this.getIndexIntrebariSelectate()
+
+        //Lasam cu checkbox doar intrebarile deja selectate pentru a putea fi deselectate :D
+        if(indexIntrebare === indexIntrebariSelectate[0] || indexIntrebare === indexIntrebariSelectate[1])
+            return true
+
+        if(this.getNumarIntrebariSelectate() === 0)
+            return this.esteBunaPentruAnaliza(indexIntrebare)
+
+        if(this.getNumarIntrebariSelectate() === 1){
+            // //Verificam intai daca intrebarea selectata este potrivita pentru regresie
+            // //Stim sigur ca avem doar una. O verificam daca este ok pentru regresie
+            // if(!this.esteBunaPentruRegresie(indexIntrebariSelectate[0]))
+            //     return false
+
+            //In punctul acesta stim ca prima intrebare este ok pentru regresie. Verificam daca si
+            // cea nou selectata este ok (a doua)
+            return (this.esteBunaPentruRegresie(indexIntrebare) && this.esteBunaPentruRegresie(indexIntrebariSelectate[0]))
+        }
+
+        return false
+    }
 
     render() {
 
-        let graficData = undefined
+        let regresionData = undefined
+        let statsData = undefined
         if(this.getNumarIntrebariSelectate() === 2)
-            graficData = this.getSetDateIntrebariSelectate()
+            regresionData = this.getSetDateIntrebariSelectate()
+
+        if(this.getNumarIntrebariSelectate() === 1)
+            statsData = this.getSetDateIntrebareSelectata()
 
         return(
             <div className={"img-container"} id={"imagineSondaje"}>
@@ -250,7 +298,7 @@ class DetaliiSondaj extends React.Component{
                                 <div className="col-md-5 card shadow-lg rounded-lg mb-2 mr-3" id={'sondaj'} >
                                     <div className="d-flex justify-content-between">
                                         <h6 className="numeSondaj m-3">Link:</h6>
-                                        <a className={"mt-3"} href={this.state.link}>{this.state.link}</a>
+                                        <a className={"mt-3"} style={{overflowWrap: "anywhere"}} href={this.state.link}>{this.state.link}</a>
                                         <FontAwesomeIcon className={"mt-3 mr-3"} icon={faCopy}/>
                                     </div>
                                 </div>
@@ -270,21 +318,21 @@ class DetaliiSondaj extends React.Component{
                                             componentaCreata = (
                                                 <div>
                                                     <SablonSelectareRaspunsDeschis key={index} index={index} detalii={intrebare.detalii}
-                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.trebuieCheckBox(index)}/>
                                                 </div>
                                             )
                                         } else if (intrebare.tip === INTREBARE_RASPUNS_MULTIPLU) {
                                             componentaCreata = (
                                                 <div>
                                                     <SablonSelectareRaspunsMultiplu key={index} index={index} detalii={intrebare.detalii}
-                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.trebuieCheckBox(index)}/>
                                                 </div>
                                             )
                                         } else if (intrebare.tip === INTREBARE_RASPUNS_SIMPLU) {
                                             componentaCreata = (
                                                 <div>
                                                     <SablonSelectareRaspunsSimplu key={index} index={index} detalii={intrebare.detalii}
-                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.esteBunaPentruAnaliza(index)}/>
+                                                        onCheckBoxChecked={this.onChildCheckBoxChecked} displayCheckBox={this.trebuieCheckBox(index)}/>
                                                 </div>
                                             )
                                         } else {
@@ -314,10 +362,18 @@ class DetaliiSondaj extends React.Component{
                                 {/*</RadioGroup>*/}
                                 <p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>
                                 <br/>
+
+
                                 <div>
                                     {
-                                        (this.getNumarIntrebariSelectate() === 2) && (<FereastraGrafic setDate={graficData[0]} limite={graficData[1]}
-                                            regresie={graficData[2]}/>)
+                                        (this.getNumarIntrebariSelectate() === 2) && (<FereastraRegresie setDate={regresionData[0]} limite={regresionData[1]}
+                                                                                                         regresie={regresionData[2]}/>)
+                                    }
+                                </div>
+
+                                <div>
+                                    {
+                                        (this.getNumarIntrebariSelectate() === 1) && (<FereastraFrecventa setDate={statsData}/>)
                                     }
                                 </div>
 
