@@ -101,7 +101,7 @@ class DetaliiSondaj extends React.Component{
         hiddenElement.click();
     }
 
-    conversieLaVector(data){
+    conversieLaVectorFloat(data){
         if(typeof data === "string"){
             //Stim sigur ca e un numar sub forma de string => conversie la un vector de un sigur element de tip numar
             return [parseFloat(data)]
@@ -113,8 +113,52 @@ class DetaliiSondaj extends React.Component{
         }
     }
 
+    conversieLaVector(data){
+        if(typeof data === "string"){
+            //Stim sigur ca e un numar sub forma de string => conversie la un vector de un sigur element de tip numar
+            return [data]
+        }
+
+        if(typeof data === "object"){
+            //Stim sigur ca e un obiect de tip Array => conversie la un vector de numere
+            return data
+        }
+    }
+
     getSetDateIntrebareSelectata() {
-        return []
+        //Ne-am asigurat in prealabil ca functia este chemata doar cand este o singura selectie
+        let intrebareSelectata = this.getIndexIntrebariSelectate()[0]
+
+        let mapFrecvente = new Map()
+
+        //Facem un map cu frecvente 0 pentru fiecare varianta de raspuns posibila
+        let posibileRaspunsuri = this.conversieLaVector(this.state.intrebari[intrebareSelectata].detalii.optiuni)
+        posibileRaspunsuri.forEach(posibilaVarianta => {
+            mapFrecvente.set(posibilaVarianta, 0)
+        })
+
+        console.log(posibileRaspunsuri)
+
+        //Actualizam numarul de frecvente al raspunsurilor
+        this.raspunsuri.forEach(raspunsSondaj => {
+            let raspunsuriIntrebare = this.conversieLaVector(raspunsSondaj[intrebareSelectata])
+
+            raspunsuriIntrebare.forEach(variantaAleasa => {
+                mapFrecvente.set(variantaAleasa, mapFrecvente.get(variantaAleasa)+1)
+            })
+        })
+
+        console.log(mapFrecvente)
+
+        let vectorAparitii = []
+        //Convertim map-ul de frecvente la perechi de genul [variantaRaspuns, nrFrecvente]
+        for (let [key, value] of mapFrecvente) {
+            vectorAparitii.push([key, value])
+        }
+        let ret = [['Raspuns', 'Frecventa raspuns']].concat(vectorAparitii)
+        console.log(ret)
+
+        return ret
     }
 
     getSetDateIntrebariSelectate(){
@@ -131,8 +175,8 @@ class DetaliiSondaj extends React.Component{
             let X = raspuns[indexIntrebariSelectate[0]]
             let Y = raspuns[indexIntrebariSelectate[1]]
 
-            X = this.conversieLaVector(X)
-            Y = this.conversieLaVector(Y)
+            X = this.conversieLaVectorFloat(X)
+            Y = this.conversieLaVectorFloat(Y)
 
             console.log("X SI Y")
             console.log(X)
