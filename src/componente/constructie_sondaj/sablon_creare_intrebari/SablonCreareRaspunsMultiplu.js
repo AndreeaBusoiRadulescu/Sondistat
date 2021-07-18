@@ -3,10 +3,12 @@ import {Checkbox, FormControl, FormControlLabel, FormGroup, Radio, RadioGroup} f
 import {INTREBARE_RASPUNS_MULTIPLU, INTREBARE_RASPUNS_SIMPLU} from "../../intrebari_sondaj/EnumTipIntrebari";
 import SablonCreareRaspunsSimplu from "./SablonCreareRaspunsSimplu";
 import {CheckBox} from "@material-ui/icons";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import {Alert} from "@material-ui/lab";
 
 class SablonCreareRaspunsMultiplu extends SablonCreareRaspunsSimplu{
 
-    //La fel ca la raspunsul simplu, difera doar salvarea
+    //La fel ca la raspunsul simplu
     //Incercam cu mostenire. Deocamdata merge bine :))
 
     getTipIntrebare(): number {
@@ -50,6 +52,15 @@ class SablonCreareRaspunsMultiplu extends SablonCreareRaspunsSimplu{
                 </FormControl>
 
                 <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
+
+                {
+                    this.state.eroareValidare.length > 1 &&
+                    <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                        <Alert  severity="error">
+                            {this.state.eroareValidare}
+                        </Alert>
+                    </Snackbar>
+                }
             </div>
         )
     }

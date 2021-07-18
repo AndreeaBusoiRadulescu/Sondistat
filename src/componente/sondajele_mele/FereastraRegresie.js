@@ -17,8 +17,10 @@ class FereastraRegresie extends React.Component{
         this.openModal = this.openModal.bind(this)
         this.afterOpenModal = this.afterOpenModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
+        this.afiseazaRaport = this.afiseazaRaport.bind(this)
 
-
+        this.R = Math.abs(this.props.regresie.correlationCoefficient).toFixed(4);
+        this.R2 = this.props.regresie.coefficientOfDetermination.toFixed(4);
     }
 
     componentDidMount() {
@@ -34,11 +36,34 @@ class FereastraRegresie extends React.Component{
         this.subtitle.style.color = '#f00';
     }
 
-     closeModal() {
+    closeModal() {
          this.setState({modalIsOpen: false})
     }
 
+    conversieR2LaProcent(R2) {
+        let str = R2.toString()
+        return str[2] + str[3] + "." + str[4] + str[5]
+    }
+
+
+    afiseazaRaport(){
+        if (this.R > 0.7){
+            return (
+                <div>
+                    <p> Coeficientul de corelație calculat este R = {this.R}, iar deoarece este mai mare decât 0.7, putem afirma că există legătură între răspunsurile întrebărilor.</p>
+                    <p>Coeficientul de determinație este R^2= {this.R2}, ceea ce înseamnă că răspunsul la a doua întrebare este influențat în proporție de {this.conversieR2LaProcent(this.R2)}% de răspunsul pentru prima întrebare</p>
+                </div>)
+        }
+        else{
+            return (
+                <div>
+                    <p> Coeficientul de corelație calculat este R = {this.R} și putem afirma că nu există legătură între răspunsurile întrebărilor.</p>
+                </div>)
+        }
+    }
+
     render (){
+
         return (
         <div>
             <button className="btn btn-secondary m-auto" onClick={this.openModal}>Afiseaza grafic de regresie</button>
@@ -79,14 +104,16 @@ class FereastraRegresie extends React.Component{
 
                         <div className="col-4">
                             <h5>Raport</h5>
-                            <p> Coeficientul de corelație calculat este R = 0,9312, iar deoarece este mai mare decât 0.7, putem afirma că există legătură între răspunsurile întrebărilor.</p>
-                            <p>Coeficientul de determinație este R^2= 0.8672, ceea ce înseamnă că 83.72% din modificarea variabilei „număr ore necesare” este determinată de modificarea variabilei „vârstă”.</p>
+                            {
+                                this.afiseazaRaport()
+                            }
+
                         </div>
                     </div>
 
-                    <div className="row">
-                        <p>{JSON.stringify(this.props.regresie)}</p>
-                    </div>
+                    {/*<div className="row">*/}
+                    {/*    <p>{JSON.stringify(this.props.regresie)}</p>*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className={"d-flex justify-content-end"}>

@@ -15,8 +15,9 @@ import {
 import SablonSelectareRaspunsDeschis from "./sablon_selectare_intrebari/SablonSelectareRaspunsDeschis";
 import SablonSelectareRaspunsMultiplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsMultiplu";
 import SablonSelectareRaspunsSimplu from "./sablon_selectare_intrebari/SablonSelectareRaspunsSimplu";
-import {parse} from "@fortawesome/fontawesome-svg-core";
 import FereastraFrecventa from "./FereastraFrecventa";
+import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import {Alert} from "@material-ui/lab";
 
 
 class DetaliiSondaj extends React.Component{
@@ -25,9 +26,9 @@ class DetaliiSondaj extends React.Component{
         super();
 
         //Intrebarile vor avea
-        // 1. ordine de afisare (sa o facem?? ma gandeam ca bagam un sort si aia e si poate ne ajuta in alte scenarii.)
+        // 1. ordine de afisare
         // 2. tip: 1 -> Raspuns deschis   2 -> Raspuns simplu   3-> Raspuns multiplu
-        // 3. detalii de implementare pt fiecare tip in parte (difera de la una la alta. Aici se vede puterea NoSQL <3)
+        // 3. detalii de implementare pt fiecare tip in parte (difera de la una la alta)
 
         this.state = {
             intrebari: [],
@@ -35,12 +36,15 @@ class DetaliiSondaj extends React.Component{
             detalii: "Detalii",
             nrRaspunsuri: null,
             link: "http://model/123",
-            intrebariSelectate: []
+            snackBarInfo:"",
+            intrebariSelectate: [],
+            snackbar: true
         }
 
         this.exportClicked = this.exportClicked.bind(this);
-        this.onChildCheckBoxChecked = this.onChildCheckBoxChecked.bind(this)
-        // const domContainer = document.querySelector('#app');
+        this.onChildCheckBoxChecked = this.onChildCheckBoxChecked.bind(this);
+        this.copyClicked = this.copyClicked.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
 
@@ -60,15 +64,13 @@ class DetaliiSondaj extends React.Component{
         })
 
         //Luam toate completarile sondajului din baza de date
-        //Ne vor ajuta la analiza datelor si alte dracovenii
         this.completari = await DatabaseInstance().getCompletariSondaj(this.idSondaj)
 
-        //preluam doar raspunsurile din completari (initial au si id sondaj, id raspuns si alte bazaconii)
         this.raspunsuri = []
         this.completari.forEach((completare) => {
             this.raspunsuri.push(completare.raspunsuri)
         })
-        //console.log(completari)
+
         //Actualizam numarul raspunsurilor/completarilor
         this.setState({
             nrRaspunsuri: this.raspunsuri.length
@@ -77,21 +79,38 @@ class DetaliiSondaj extends React.Component{
 
 
     exportClicked(e){
-        // alert(JSON.stringify(this.raspunsuri, null, 2))
+        //CSV FILE
+        let csvFileData = this.raspunsuri;
+        let csv = "";
+
+        // for (let intrebare in csvFileData[0]){
+        //     csv += intrebare + ";";
+        // }
+
+        for (let intrebare of this.state.intrebari){
+            csv += intrebare.detalii.titlu + ';';
+        }
+        csv += "\n";
+
+        csvFileData.forEach(raspunsSondaj => {
+
+            for (let intrebare in raspunsSondaj){
+                csv += raspunsSondaj[intrebare] + ";";
+            }
+            csv += "\n";
+
+        });
+
+        var hiddenElementCSV = document.createElement('a');
+        hiddenElementCSV.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElementCSV.target = '_blank';
+
+        hiddenElementCSV.download = 'raspunsuri.csv';
+        hiddenElementCSV.click();
+
+
+        //JSON FILE
         let jsonFileData = JSON.stringify(this.raspunsuri, null, 2);
-
-        // //define the heading for each row of the data
-        // var csv = 'Name,Profession\n';
-        //
-        // //merge the data with CSV
-        // csvFileData.forEach(function(row) {
-        //     csv += row.join(',');
-        //     csv += "\n";
-        // });
-
-        //display the created CSV data on the web browser
-        // document.write(jsonFileData);
-
 
         var hiddenElement = document.createElement('a');
         hiddenElement.href = 'data:text/json;charset=utf-8,' + encodeURI(jsonFileData);
@@ -99,6 +118,16 @@ class DetaliiSondaj extends React.Component{
 
         hiddenElement.download = 'raspunsuri.json';
         hiddenElement.click();
+    }
+
+    copyClicked(){
+        const text = this.state.link;
+        const mainThis = this;
+        navigator.clipboard.writeText(text).then(function() {
+            mainThis.setState({snackBarInfo: "Textul a fost copiat!", snackbar: true})
+        }, function(err) {
+            mainThis.setState({snackBarInfo: "Nu s-a putut copia textul! A intervenit o eroare", snackbar: true})
+        });
     }
 
     conversieLaVectorFloat(data){
@@ -126,12 +155,12 @@ class DetaliiSondaj extends React.Component{
     }
 
     getSetDateIntrebareSelectata() {
-        //Ne-am asigurat in prealabil ca functia este chemata doar cand este o singura selectie
+        // functia este chemata doar cand este o singura selectie
         let intrebareSelectata = this.getIndexIntrebariSelectate()[0]
 
         let mapFrecvente = new Map()
 
-        //Facem un map cu frecvente 0 pentru fiecare varianta de raspuns posibila
+        //map cu frecvente 0 pentru fiecare varianta de raspuns posibila
         let posibileRaspunsuri = this.conversieLaVector(this.state.intrebari[intrebareSelectata].detalii.optiuni)
         posibileRaspunsuri.forEach(posibilaVarianta => {
             mapFrecvente.set(posibilaVarianta, 0)
@@ -156,8 +185,6 @@ class DetaliiSondaj extends React.Component{
             vectorAparitii.push([key, value])
         }
         let ret = [['Raspuns', 'Frecventa raspuns']].concat(vectorAparitii)
-        console.log(ret)
-
         return ret
     }
 
@@ -178,9 +205,6 @@ class DetaliiSondaj extends React.Component{
             X = this.conversieLaVectorFloat(X)
             Y = this.conversieLaVectorFloat(Y)
 
-            console.log("X SI Y")
-            console.log(X)
-            console.log(Y)
 
             //Fac pereche pentru fiecare x din X cu un y din Y
             X.forEach(x => {
@@ -192,21 +216,16 @@ class DetaliiSondaj extends React.Component{
 
         let tabHeader = [this.state.intrebari[indexIntrebariSelectate[0]].detalii.titlu, this.state.intrebari[indexIntrebariSelectate[1]].detalii.titlu]
         setDate = [tabHeader].concat(setDate)
-        // console.log(setDate)
 
         let X = setDate.map(date => date[0]).filter(date => !isNaN(date))
         let Y = setDate.map(date => date[1]).filter(date => !isNaN(date))
-        console.log(X)
-        console.log(Y)
+
         let limite = {
             minX: Math.min(...X) - 2,
             maxX: Math.max(...X) + 2,
             minY: Math.min(...Y) - 2,
             maxY: Math.max(...Y) + 2
         }
-
-        console.log("LIMITE")
-        console.log(limite)
 
         //Prelucram setul de date pentru a face regresie liniara
         let statsData = []
@@ -218,8 +237,6 @@ class DetaliiSondaj extends React.Component{
             x: 'metric',
             y: 'metric'
         }
-
-        console.log(statsData)
 
         let stats = new Statistics(statsData, metrics)
         let regression = stats.linearRegression('x', 'y')
@@ -290,7 +307,7 @@ class DetaliiSondaj extends React.Component{
 
         let indexIntrebariSelectate = this.getIndexIntrebariSelectate()
 
-        //Lasam cu checkbox doar intrebarile deja selectate pentru a putea fi deselectate :D
+        //Lasam cu checkbox doar intrebarile deja selectate pentru a putea fi deselectate
         if(indexIntrebare === indexIntrebariSelectate[0] || indexIntrebare === indexIntrebariSelectate[1])
             return true
 
@@ -311,6 +328,14 @@ class DetaliiSondaj extends React.Component{
         return false
     }
 
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({snackbar: false})
+        // event.setOpen(false);
+    };
+
     render() {
 
         let regresionData = undefined
@@ -328,7 +353,7 @@ class DetaliiSondaj extends React.Component{
                     <div className={"lista-carduri-detalii"}>
                         <div className="card shadow-lg rounded-lg min-vw-80 mb-2" id={'sondaj'} >
                             <h1>{this.state.titlu}</h1>
-                            <p>Detalii formular</p>
+                            <p>{this.state.detalii}</p>
                         </div>
 
                             <div className={"row justify-content-around"}>
@@ -342,8 +367,8 @@ class DetaliiSondaj extends React.Component{
                                 <div className="col-md-5 card shadow-lg rounded-lg mb-2 mr-3" id={'sondaj'} >
                                     <div className="d-flex justify-content-between">
                                         <h6 className="numeSondaj m-3">Link:</h6>
-                                        <a className={"mt-3"} style={{overflowWrap: "anywhere"}} href={this.state.link}>{this.state.link}</a>
-                                        <FontAwesomeIcon className={"mt-3 mr-3"} icon={faCopy}/>
+                                        <a target="_blank" rel="noopener noreferrer" className={"mt-3"} id="link-text" style={{overflowWrap: "anywhere"}} href={this.state.link}>{this.state.link}</a>
+                                        <FontAwesomeIcon className={"mt-3 mr-3"} icon={faCopy}  onClick={this.copyClicked}/>
                                     </div>
                                 </div>
                             </div>
@@ -393,20 +418,12 @@ class DetaliiSondaj extends React.Component{
                                 <br/>
                                 <h5>Meniu generare grafic</h5>
                                 <br/>
-                                {/*<RadioGroup>*/}
-                                {/*    {*/}
-                                {/*        <label>*/}
-                                {/*            <FormControlLabel control={<Radio/>}/>*/}
-                                {/*            <span>Grafic de frecventa</span>*/}
-                                {/*            <br/>*/}
-                                {/*            <FormControlLabel control={<Radio/>}/>*/}
-                                {/*            <span>Grafic de regresie</span>*/}
-                                {/*        </label>*/}
-                                {/*    }*/}
-                                {/*</RadioGroup>*/}
-                                <p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>
+                                <div>
+                                    {
+                                        (this.getNumarIntrebariSelectate() === 0) && (<p>Va rugam sa selectati intrebarile pentru care doriti o analiza grafica.</p>)
+                                    }
+                                </div>
                                 <br/>
-
 
                                 <div>
                                     {
@@ -424,8 +441,14 @@ class DetaliiSondaj extends React.Component{
                                 <br/>
                             </div>
                         </div>
-
-
+                        {
+                            this.state.snackBarInfo.length > 1 &&
+                            <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                                <Alert severity="info">
+                                    {this.state.snackBarInfo}
+                                </Alert>
+                            </Snackbar>
+                        }
                     </div>
                 </div>
             </div>

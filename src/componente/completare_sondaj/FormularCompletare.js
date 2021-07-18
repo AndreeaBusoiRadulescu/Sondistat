@@ -1,6 +1,3 @@
-import IntrebareRaspunsDeschis from "../intrebari_sondaj/IntrebareRaspunsDeschis";
-import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultiplu";
-import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import React from "react";
 import {renderVectorIntrebari} from "../FunctieAfisare";
 import DatabaseInstance from "../../Database";
@@ -96,6 +93,7 @@ class FormularCompletare extends React.Component {
 
         await DatabaseInstance().saveCompletareSondaj(this.idSondaj, hashMapRaspunsuri)
         alert("Raspuns salvat cu succes! Multumim pentru completare!")
+        window.location.href = "/login"
     }
 
     render() {

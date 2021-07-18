@@ -17,7 +17,7 @@ class SablonCreareRaspunsDeschis extends React.Component{
             maxWords: "",
             intrebare: "",
             eroareValidare: "",
-            snackbar: false
+            snackbar: true
         }
     }
 
@@ -62,9 +62,17 @@ class SablonCreareRaspunsDeschis extends React.Component{
             })
         }
         else {
-            this.state.snackbar = true;
+            this.setState({snackbar: true});
         }
     }
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({snackbar: false})
+        // event.setOpen(false);
+    };
 
     render(){
         return (
@@ -86,11 +94,15 @@ class SablonCreareRaspunsDeschis extends React.Component{
 
             <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
 
-            <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
-                <Alert  severity="error">
-                    {this.state.eroareValidare}
-                </Alert>
-            </Snackbar>
+            {
+                this.state.eroareValidare.length > 1 &&
+                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                    <Alert  severity="error">
+                        {this.state.eroareValidare}
+                    </Alert>
+                </Snackbar>
+            }
+
         </div>
         )
     }

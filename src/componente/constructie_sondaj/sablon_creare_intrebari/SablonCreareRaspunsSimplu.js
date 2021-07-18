@@ -12,31 +12,41 @@ class SablonCreareRaspunsSimplu extends React.Component{
         this.handleIntrebare = this.handleIntrebare.bind(this)
         this.handleSave = this.handleSave.bind(this)
         this.adaugaVariantaRaspuns = this.adaugaVariantaRaspuns.bind(this)
+        this.handleClose = this.handleClose.bind(this)
 
         //Raspunsul deschis are o intrebare, variante de raspuns si eroareDeValidare
         this.state = {
             intrebare: "",
             eroareValidare: "",
             varianteRaspuns: [],
-            snackbar: false
+            snackbar: true
         }
     }
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({snackbar: false})
+        // event.setOpen(false);
+    };
 
     async adaugaVariantaRaspuns(e) {
         //Luam text-ul variantei de raspuns care se doreste a fi adaugata
         let variantaRaspuns = document.getElementById("varianta-raspuns").value
 
+        //Stergem varianta introdusa
+        document.getElementById("varianta-raspuns").value = ""
+
         //Verificare daca varianta nu e nula
         if(!variantaRaspuns || variantaRaspuns.length < 1){
-            await this.setState({eroareValidare: "Varianta de raspuns nu poate fi goala!"})
-            this.state.snackbar = true;
+            await this.setState({eroareValidare: "Varianta de raspuns nu poate fi goala!", snackbar: true})
             return
         }
 
         //Verificare daca varianta exista deja
         if(this.state.varianteRaspuns.includes(variantaRaspuns)){
-            await this.setState({eroareValidare: "Varianta de raspuns exista deja!"})
-            this.state.snackbar = true;
+            await this.setState({eroareValidare: "Varianta de raspuns exista deja!", snackbar: true})
             return
         }
 
@@ -80,7 +90,7 @@ class SablonCreareRaspunsSimplu extends React.Component{
             })
         }
         else{
-            this.state.snackbar = true;
+            this.setState({snackbar: true});
         }
 
     }
@@ -129,11 +139,14 @@ class SablonCreareRaspunsSimplu extends React.Component{
 
                 <button className="btn btn-primary m-auto" onClick={this.handleSave}>Salveaza</button>
 
-                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
-                    <Alert  severity="error">
-                        {this.state.eroareValidare}
-                    </Alert>
-                </Snackbar>
+                {
+                    this.state.eroareValidare.length > 1 &&
+                    <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                        <Alert  severity="error">
+                            {this.state.eroareValidare}
+                        </Alert>
+                    </Snackbar>
+                }
             </div>
         )
     }

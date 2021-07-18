@@ -20,6 +20,7 @@ const DatabaseInstance = (function () {
         setCurrentUser: function (user) {
             console.log(user)
             window.sessionStorage.setItem('currentUser', JSON.stringify(user));
+            window.sessionStorage.setItem('loggedTimestamp', + new Date())
             // CurrentUser.value = user
             // Object.freeze(CurrentUser.value)
         },

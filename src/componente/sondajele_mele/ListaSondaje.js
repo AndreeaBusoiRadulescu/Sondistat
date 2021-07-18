@@ -41,11 +41,18 @@ class ListaSondaje extends React.Component{
         if (reason === 'clickaway') {
             return;
         }
-        this.setState({"snackbar": false})
+        this.setState({snackbar: false})
         // event.setOpen(false);
     };
 
     render() {
+
+
+        let timpTrecutDeLaLogare = (+ new Date()) - (window.sessionStorage.getItem('loggedTimestamp'))
+        let primaLogare = timpTrecutDeLaLogare < 9000
+        console.log(primaLogare)
+        console.log(timpTrecutDeLaLogare)
+
         return(
             <div className={"img-container"} id={"imagineSondaje"}>
                 <MeniuLogOut/>
@@ -62,11 +69,14 @@ class ListaSondaje extends React.Component{
                     </div>
                 </div>
 
-                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
-                    <Alert  severity="success">
-                       Te-ai logat cu succes!
-                    </Alert>
-                </Snackbar>
+                {
+                    primaLogare &&
+                    <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                        <Alert  severity="success">
+                           Te-ai logat cu succes!
+                        </Alert>
+                    </Snackbar>
+                }
             </div>
 
         )

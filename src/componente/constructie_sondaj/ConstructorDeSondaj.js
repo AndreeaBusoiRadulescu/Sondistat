@@ -9,8 +9,9 @@ import IntrebareRaspunsMultiplu from "../intrebari_sondaj/IntrebareRaspunsMultip
 import IntrebareRaspunsSimplu from "../intrebari_sondaj/IntrebareRaspunsSimplu";
 import {faArrowDown, faArrowUp, faListAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Alert} from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import {Alert} from "@material-ui/lab";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const INTREBARE_RASPUNS_DESCHIS = 1
 const INTREBARE_RASPUNS_SIMPLU = 2
@@ -28,7 +29,7 @@ class ConstructorDeSondaj extends React.Component{
             intrebari: [],
             tipIntrebareNoua: 0,
             eroareValidare: "",
-            snackbar: false
+            snackbar: true
         }
 
         this.handleDetailsChange = this.handleDetailsChange.bind(this);
@@ -39,6 +40,7 @@ class ConstructorDeSondaj extends React.Component{
         this.handleRaspunsSimplu = this.handleRaspunsSimplu.bind(this);
         this.handleIntrebareSalvata = this.handleIntrebareSalvata.bind(this);
         this.stergeIntrebare = this.stergeIntrebare.bind(this);
+        this.handleClose = this.handleClose.bind(this)
     }
 
     //Alegere titlu pt sondaj
@@ -132,7 +134,7 @@ class ConstructorDeSondaj extends React.Component{
             })
         }
         else{
-            this.state.snackbar = true;
+            this.setState({snackbar: true})
         }
 
     }
@@ -272,7 +274,18 @@ class ConstructorDeSondaj extends React.Component{
         )
     }
 
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({snackbar: false})
+        // event.setOpen(false);
+    };
+
     render() {
+
+        console.log(this.state.eroareValidare.length)
+
         return(
             <div>
                 <MeniuInapoi/>
@@ -325,16 +338,20 @@ class ConstructorDeSondaj extends React.Component{
                         </div>
 
                         {/*Buton save*/}
-                        <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista-model'}>
-                            <h6 onClick={this.saveForm}><b>Salveaza sondajul</b></h6>
+                        <div className="card element-model shadow-lg rounded-lg min-vw-80 mb-2 mb-4 mt-4" id={'element-lista-model'}
+                             onClick={this.saveForm}>
+                            <h6><b>Salveaza sondajul</b></h6>
                         </div>
                     </div>
                 </div>
-                <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
-                    <Alert  severity="error">
-                        {this.state.eroareValidare}
-                    </Alert>
-                </Snackbar>
+                {
+                    this.state.eroareValidare.length > 1 &&
+                    <Snackbar open={this.state.snackbar} onClose={this.handleClose} autoHideDuration={3000} >
+                        <Alert severity="error">
+                            {this.state.eroareValidare}
+                        </Alert>
+                    </Snackbar>
+                }
             </div>
         )
     }
